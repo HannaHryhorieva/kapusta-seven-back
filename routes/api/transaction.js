@@ -16,7 +16,7 @@ router.get(
   controllerWrapper(transactionController.byYear)
 )
 router.get(
-  '/byCategory/:year',
+  '/byCategory/:year/:month',
   authenticate,
   controllerWrapper(transactionController.byCategory)
 )

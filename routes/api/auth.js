@@ -10,9 +10,11 @@ router.get('/google', controllerWrapper(authCtr.googleAuth))
 
 router.get('/google-redirect', controllerWrapper(authCtr.googleRedirect))
 
+router.get('/verify/:verificationToken', controllerWrapper(authCtr.verify))
+
 router.post('/signin', controllerWrapper(authCtr.login))
 
-router.get('/verify/:verificationToken', controllerWrapper(authCtr.verify))
+router.post('/logout', authenticate, controllerWrapper(authCtr.logout))
 
 router.patch('/balance/:idUser', authenticate, controllerWrapper(authCtr.updBalance))
 
