@@ -14,6 +14,7 @@ const userSchema = Schema({
   name: {
     type: String,
     required: false,
+    default: 'User Name'
   },
   picture: {
     type: String,

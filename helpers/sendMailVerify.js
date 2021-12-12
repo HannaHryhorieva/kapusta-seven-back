@@ -1,26 +1,27 @@
 const nodemailer = require('nodemailer')
-
 require('dotenv').config()
 
-const config = {
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'goitnodejs@meta.ua',
-    pass: process.env.PASSWORD,
-  },
-}
+const sendMailVerify = (mail) => {
+  console.log(mail)
+  const config = {
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'supp0rt.kapusta@gmail.com',
+      pass: process.env.SEND_MAIL_PASS,
+    },
+  }
 
-const transporter = nodemailer.createTransport(config)
-const emailOptions = {
-  from: 'supp0rt.kapusta@gmail.com',
-  to: 'noresponse@gmail.com',
-  subject: 'Nodemailer test',
-  text: 'Привет. Мы тестируем отправку писем!',
-}
+  const transporter = nodemailer.createTransport(config)
+  const emailOptions = {
+    ...mail,
+    from: 'supp0rt.kapusta@gmail.com',
+  }
 
-transporter
-  .sendMail(emailOptions)
-  .then((info) => console.log(info))
-  .catch((err) => console.log(err))
+  return transporter
+    .sendMail(emailOptions)
+    .then((info) => console.log(info))
+    .catch((err) => console.log(err))
+}
+module.exports = sendMailVerify
