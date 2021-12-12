@@ -13,6 +13,13 @@ const registrationUser = async (req, res) => {
   newUser.setPassword(password)
   await newUser.save()
 
+  const sendMail = {
+    to: email,
+    subject: 'Confirmation of registration',
+    html: `<a href='http://localhost:3000/api/users/verivy/${verificationToken}'>Verify Email Now</a>`,
+
+  }
+
   res.json({
     status: 'Success',
     code: 201,
