@@ -7,7 +7,7 @@ const sortTransactionsByType = (data) =>
     { income: [], expense: [] }
   )
 
-const prepareYearlyTransactions = (data) =>
+const prepareTransactionsByMonth = (data) =>
   data.reduce(
     (acc, item) => ({
       ...acc,
@@ -19,6 +19,21 @@ const prepareYearlyTransactions = (data) =>
     {}
   )
 
+const prepareTransactionByCategory = (data) =>
+  data.reduce(
+    (acc, item) => ({
+      [item.category]: {
+        data: [...(acc[item.category]?.data || []), item],
+        total: (acc[item.category]?.total || 0) + item.amount,
+      },
+    }),
+    {}
+  )
+
 module.exports = {
-  transactionsUtils: { sortTransactionsByType, prepareYearlyTransactions },
+  transactionsUtils: {
+    sortTransactionsByType,
+    prepareTransactionsByMonth,
+    prepareTransactionByCategory,
+  },
 }

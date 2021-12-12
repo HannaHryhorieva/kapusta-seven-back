@@ -3,8 +3,12 @@ const Transaction = require('../../model/transaction')
 
 module.exports = async (req, res, next) => {
   const { id } = req.params
+  const { _id } = req.user
 
-  const transaction = await Transaction.findByIdAndRemove(id)
+  const transaction = await Transaction.findOneAndDelete({
+    _id: id,
+    owner: _id,
+  })
 
   if (!transaction) next(new NotFound('Transaction not found!'))
 

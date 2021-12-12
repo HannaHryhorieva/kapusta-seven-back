@@ -2,5 +2,8 @@ const create = require('./create')
 const getAll = require('./getAll')
 const remove = require('./remove')
 const byYear = require('./byYear')
+const byCategory = require('./byCategory')
 
-module.exports = { transactionController: { create, getAll, remove, byYear } }
+module.exports = {
+  transactionController: { create, getAll, remove, byYear, byCategory },
+}

@@ -1,7 +1,9 @@
 const Transaction = require('../../model/transaction')
 
 module.exports = async (req, res, next) => {
-  const transaction = await new Transaction(req.body)
+  const { _id } = req.user
+
+  const transaction = await new Transaction({ ...req.body, owner: _id })
 
   await transaction.save()
 
