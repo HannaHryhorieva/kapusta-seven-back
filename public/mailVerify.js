@@ -1,21 +1,13 @@
-function mailVerify(verificationToken, name) {
+const mailVerify = (verificationToken, name) => {
   const urlVerify = `http://localhost:3001/auth/verify/${verificationToken}`
-  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
-  data-editor-version="2"
-  class="sg-campaigns"
   xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
 >
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
-    />
-    <!--[if !mso]><!-->
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <!--<![endif]-->
-    <!--[if (gte mso 9)|(IE)]>
+    <!--[if gte mso 9]>
       <xml>
         <o:OfficeDocumentSettings>
           <o:AllowPNG />
@@ -23,1110 +15,1022 @@ function mailVerify(verificationToken, name) {
         </o:OfficeDocumentSettings>
       </xml>
     <![endif]-->
-    <!--[if (gte mso 9)|(IE)]>
-      <style type="text/css">
-        body {
-          width: 600px;
-          margin: 0 auto;
-        }
-        table {
-          border-collapse: collapse;
-        }
-        table,
-        td {
-          mso-table-lspace: 0pt;
-          mso-table-rspace: 0pt;
-        }
-        img {
-          -ms-interpolation-mode: bicubic;
-        }
-      </style>
-    <![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <!--[if !mso]><!-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<![endif]-->
+    <title></title>
+
     <style type="text/css">
-      body,
-      p,
-      div {
-        font-family: inherit;
-        font-size: 14px;
-      }
-      body {
+      table,
+      td {
         color: #000000;
       }
-      body a {
-        color: #1188e6;
-        text-decoration: none;
+      a {
+        color: #0000ee;
+        text-decoration: underline;
       }
-      p {
+      @media (max-width: 480px) {
+        #u_content_image_1 .v-src-width {
+          width: 429px !important;
+        }
+        #u_content_image_1 .v-src-max-width {
+          max-width: 48% !important;
+        }
+        #u_content_image_4 .v-src-width {
+          width: 429px !important;
+        }
+        #u_content_image_4 .v-src-max-width {
+          max-width: 48% !important;
+        }
+      }
+      @media only screen and (min-width: 620px) {
+        .u-row {
+          width: 600px !important;
+        }
+        .u-row .u-col {
+          vertical-align: top;
+        }
+
+        .u-row .u-col-100 {
+          width: 600px !important;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .u-row-container {
+          max-width: 100% !important;
+          padding-left: 0px !important;
+          padding-right: 0px !important;
+        }
+        .u-row .u-col {
+          min-width: 320px !important;
+          max-width: 100% !important;
+          display: block !important;
+        }
+        .u-row {
+          width: calc(100% - 40px) !important;
+        }
+        .u-col {
+          width: 100% !important;
+        }
+        .u-col > div {
+          margin: 0 auto;
+        }
+      }
+      body {
         margin: 0;
         padding: 0;
       }
-      table.wrapper {
-        width: 100% !important;
+
+      table,
+      tr,
+      td {
+        vertical-align: top;
+        border-collapse: collapse;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .ie-container table,
+      .mso-container table {
         table-layout: fixed;
-        -webkit-font-smoothing: antialiased;
-        -webkit-text-size-adjust: 100%;
-        -moz-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
       }
-      img.max-width {
-        max-width: 100% !important;
+
+      * {
+        line-height: inherit;
       }
-      .column.of-2 {
-        width: 50%;
-      }
-      .column.of-3 {
-        width: 33.333%;
-      }
-      .column.of-4 {
-        width: 25%;
-      }
-      ul ul ul ul {
-        list-style-type: disc !important;
-      }
-      ol ol {
-        list-style-type: lower-roman !important;
-      }
-      ol ol ol {
-        list-style-type: lower-latin !important;
-      }
-      ol ol ol ol {
-        list-style-type: decimal !important;
-      }
-      @media screen and (max-width: 480px) {
-        .preheader .rightColumnContent,
-        .footer .rightColumnContent {
-          text-align: left !important;
-        }
-        .preheader .rightColumnContent div,
-        .preheader .rightColumnContent span,
-        .footer .rightColumnContent div,
-        .footer .rightColumnContent span {
-          text-align: left !important;
-        }
-        .preheader .rightColumnContent,
-        .preheader .leftColumnContent {
-          font-size: 80% !important;
-          padding: 5px 0;
-        }
-        table.wrapper-mobile {
-          width: 100% !important;
-          table-layout: fixed;
-        }
-        img.max-width {
-          height: auto !important;
-          max-width: 100% !important;
-        }
-        a.bulletproof-button {
-          display: block !important;
-          width: auto !important;
-          font-size: 80%;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-        }
-        .columns {
-          width: 100% !important;
-        }
-        .column {
-          display: block !important;
-          width: 100% !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-        }
-        .social-icon-column {
-          display: inline-block !important;
-        }
+
+      a[x-apple-data-detectors="true"] {
+        color: inherit !important;
+        text-decoration: none !important;
       }
     </style>
-    <!--user entered Head Start-->
+
+    <!--[if !mso]><!-->
     <link
-      href="https://fonts.googleapis.com/css?family=Muli&display=swap"
+      href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap"
       rel="stylesheet"
+      type="text/css"
     />
-    <style>
-      body {
-        font-family: "Muli", sans-serif;
-      }
-    </style>
-    <!--End Head user entered-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Rubik:400,700&display=swap"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!--<![endif]-->
   </head>
-  <body>
-    <center
-      class="wrapper"
-      data-link-color="#1188E6"
-      data-body-style="font-size:14px; font-family:inherit; color:#000000; background-color:#FFFFFF;"
+
+  <body
+    class="clean-body u_body"
+    style="
+      margin: 0;
+      padding: 0;
+      -webkit-text-size-adjust: 100%;
+      background-color: #f5f6fb;
+      color: #000000;
+    "
+  >
+    <!--[if IE]><div class="ie-container"><![endif]-->
+    <!--[if mso]><div class="mso-container"><![endif]-->
+    <table
+      style="
+        border-collapse: collapse;
+        table-layout: fixed;
+        border-spacing: 0;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+        vertical-align: top;
+        min-width: 320px;
+        margin: 0 auto;
+        background-color: #f5f6fb;
+        width: 100%;
+      "
+      cellpadding="0"
+      cellspacing="0"
     >
-      <div class="webkit">
-        <table
-          cellpadding="0"
-          cellspacing="0"
-          border="0"
-          width="100%"
-          class="wrapper"
-          bgcolor="#FFFFFF"
-        >
-          <tr>
-            <td valign="top" bgcolor="#FFFFFF" width="100%">
-              <table
-                width="100%"
-                role="content-container"
-                class="outer"
-                align="center"
-                cellpadding="0"
-                cellspacing="0"
-                border="0"
+      <tbody>
+        <tr style="vertical-align: top">
+          <td
+            style="
+              word-break: break-word;
+              border-collapse: collapse !important;
+              vertical-align: top;
+            "
+          >
+            <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #f5f6fb;"><![endif]-->
+
+            <div
+              class="u-row-container"
+              style="
+                padding: 0px;
+                background-image: url('https://i.ibb.co/DQL7B3f/image-7.png');
+                background-repeat: repeat;
+                background-position: center top;
+                background-color: #f5f6fb;
+              "
+            >
+              <div
+                class="u-row"
+                style="
+                  margin: 0 auto;
+                  min-width: 320px;
+                  max-width: 600px;
+                  overflow-wrap: break-word;
+                  word-wrap: break-word;
+                  word-break: break-word;
+                  background-color: transparent;
+                "
               >
-                <tr>
-                  <td width="100%">
-                    <table
-                      width="100%"
-                      cellpadding="0"
-                      cellspacing="0"
-                      border="0"
-                    >
-                      <tr>
-                        <td>
-                          <!--[if mso]>
-    <center>
-    <table><tr><td width="600">
-  <![endif]-->
-                          <table
-                            width="100%"
-                            cellpadding="0"
-                            cellspacing="0"
-                            border="0"
-                            style="width: 100%; max-width: 600px"
-                            align="center"
-                          >
+                <div
+                  style="
+                    border-collapse: collapse;
+                    display: table;
+                    width: 100%;
+                    background-color: transparent;
+                  "
+                >
+                  <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-image: url('https://i.ibb.co/DQL7B3f/image-7.png');background-repeat: repeat;background-position: center top;background-color: #f5f6fb;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
+
+                  <!--[if (mso)|(IE)]><td align="center" width="600" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
+                  <div
+                    class="u-col u-col-100"
+                    style="
+                      max-width: 320px;
+                      min-width: 600px;
+                      display: table-cell;
+                      vertical-align: top;
+                    "
+                  >
+                    <div style="width: 100% !important">
+                      <!--[if (!mso)&(!IE)]><!--><div
+                        style="
+                          padding: 0px;
+                          border-top: 0px solid transparent;
+                          border-left: 0px solid transparent;
+                          border-right: 0px solid transparent;
+                          border-bottom: 0px solid transparent;
+                        "
+                      ><!--<![endif]-->
+                        <table
+                          id="u_content_image_1"
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
                             <tr>
                               <td
-                                role="modules-container"
                                 style="
-                                  padding: 0px 0px 0px 0px;
-                                  color: #000000;
-                                  text-align: left;
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 20px 10px 5px;
+                                  font-family: 'Rubik', sans-serif;
                                 "
-                                bgcolor="#FFFFFF"
-                                width="100%"
                                 align="left"
                               >
                                 <table
-                                  class="module preheader preheader-hide"
-                                  role="module"
-                                  data-type="preheader"
-                                  border="0"
+                                  width="100%"
                                   cellpadding="0"
                                   cellspacing="0"
-                                  width="100%"
-                                  style="
-                                    display: none !important;
-                                    mso-hide: all;
-                                    visibility: hidden;
-                                    opacity: 0;
-                                    color: transparent;
-                                    height: 0;
-                                    width: 0;
-                                  "
+                                  border="0"
                                 >
                                   <tr>
-                                    <td role="module-content">
-                                      <p></p>
+                                    <td
+                                      style="
+                                        padding-right: 0px;
+                                        padding-left: 0px;
+                                      "
+                                      align="left"
+                                    >
+                                      <img
+                                        align="left"
+                                        border="0"
+                                        src="https://i.ibb.co/YLxTkqV/image-5.png"
+                                        alt="Logo"
+                                        title="Logo"
+                                        style="
+                                          outline: none;
+                                          text-decoration: none;
+                                          -ms-interpolation-mode: bicubic;
+                                          clear: both;
+                                          display: inline-block !important;
+                                          border: none;
+                                          height: auto;
+                                          float: none;
+                                          width: 20%;
+                                          max-width: 116px;
+                                        "
+                                        width="116"
+                                        class="v-src-width v-src-max-width"
+                                      />
                                     </td>
                                   </tr>
                                 </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          id="u_content_image_4"
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 5px 0px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
                                 <table
-                                  border="0"
+                                  width="100%"
                                   cellpadding="0"
                                   cellspacing="0"
-                                  align="center"
-                                  width="100%"
-                                  role="module"
-                                  data-type="columns"
-                                  style="padding: 30px 20px 30px 20px"
-                                  bgcolor="#f6f6f6"
-                                  data-distribution="1"
-                                >
-                                  <tbody>
-                                    <tr role="module-content">
-                                      <td height="100%" valign="top">
-                                        <table
-                                          width="540"
-                                          style="
-                                            width: 540px;
-                                            border-spacing: 0;
-                                            border-collapse: collapse;
-                                            margin: 0px 10px 0px 10px;
-                                          "
-                                          cellpadding="0"
-                                          cellspacing="0"
-                                          align="left"
-                                          border="0"
-                                          bgcolor=""
-                                          class="column column-0"
-                                        >
-                                          <tbody>
-                                            <tr>
-                                              <td
-                                                style="
-                                                  padding: 0px;
-                                                  margin: 0px;
-                                                  border-spacing: 0;
-                                                "
-                                              >
-                                                <table
-                                                  class="wrapper"
-                                                  role="module"
-                                                  data-type="image"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="72aac1ba-9036-4a77-b9d5-9a60d9b05cba"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          font-size: 6px;
-                                                          line-height: 10px;
-                                                          padding: 0px 0px 0px
-                                                            0px;
-                                                        "
-                                                        valign="top"
-                                                        align="center"
-                                                      >
-                                                        <img
-                                                          class="max-width"
-                                                          border="0"
-                                                          style="
-                                                            display: block;
-                                                            color: #000000;
-                                                            text-decoration: none;
-                                                            font-family: Helvetica,
-                                                              arial, sans-serif;
-                                                            font-size: 16px;
-                                                          "
-                                                          width="29"
-                                                          alt=""
-                                                          data-proportionally-constrained="true"
-                                                          data-responsive="false"
-                                                          src="http://cdn.mcauto-images-production.sendgrid.net/954c252fedab403f/9200c1c9-b1bd-47ed-993c-ee2950a0f239/29x27.png"
-                                                          height="27"
-                                                        />
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="spacer"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="331cde94-eb45-45dc-8852-b7dbeb9101d7"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 0px 0px 20px
-                                                            0px;
-                                                        "
-                                                        role="module-content"
-                                                        bgcolor=""
-                                                      ></td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="wrapper"
-                                                  role="module"
-                                                  data-type="image"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="d8508015-a2cb-488c-9877-d46adf313282"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          font-size: 6px;
-                                                          line-height: 10px;
-                                                          padding: 0px 0px 0px
-                                                            0px;
-                                                        "
-                                                        valign="top"
-                                                        align="center"
-                                                      >
-                                                        <img
-                                                          class="max-width"
-                                                          border="0"
-                                                          style="
-                                                            display: block;
-                                                            color: #000000;
-                                                            text-decoration: none;
-                                                            font-family: Helvetica,
-                                                              arial, sans-serif;
-                                                            font-size: 16px;
-                                                          "
-                                                          width="95"
-                                                          alt=""
-                                                          data-proportionally-constrained="true"
-                                                          data-responsive="false"
-                                                          src="http://cdn.mcauto-images-production.sendgrid.net/954c252fedab403f/61156dfa-7b7f-4020-85f8-a586addf4288/95x33.png"
-                                                          height="33"
-                                                        />
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="spacer"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="27716fe9-ee64-4a64-94f9-a4f28bc172a0"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 0px 0px 30px
-                                                            0px;
-                                                        "
-                                                        role="module-content"
-                                                        bgcolor=""
-                                                      ></td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="text"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="948e3f3f-5214-4721-a90e-625a47b1c957"
-                                                  data-mc-module-version="2019-10-22"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 50px 30px
-                                                            18px 30px;
-                                                          line-height: 36px;
-                                                          text-align: inherit;
-                                                          background-color: #ffffff;
-                                                        "
-                                                        height="100%"
-                                                        valign="top"
-                                                        bgcolor="#ffffff"
-                                                        role="module-content"
-                                                      >
-                                                        <div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                font-size: 43px;
-                                                              "
-                                                              >Thanks for
-                                                              signing up,
-                                                              ${name}</span
-                                                            >
-                                                          </div>
-                                                          <div></div>
-                                                        </div>
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="text"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="a10dcb57-ad22-4f4d-b765-1d427dfddb4e"
-                                                  data-mc-module-version="2019-10-22"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 18px 30px
-                                                            18px 30px;
-                                                          line-height: 22px;
-                                                          text-align: inherit;
-                                                          background-color: #ffffff;
-                                                        "
-                                                        height="100%"
-                                                        valign="top"
-                                                        bgcolor="#ffffff"
-                                                        role="module-content"
-                                                      >
-                                                        <div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                font-size: 18px;
-                                                              "
-                                                              >Please verify
-                                                              your email address
-                                                              to</span
-                                                            ><span
-                                                              style="
-                                                                color: #000000;
-                                                                font-size: 18px;
-                                                                font-family: arial,
-                                                                  helvetica,
-                                                                  sans-serif;
-                                                              "
-                                                            >
-                                                              get access to
-                                                              thousands of
-                                                              exclusive job
-                                                              listings</span
-                                                            ><span
-                                                              style="
-                                                                font-size: 18px;
-                                                              "
-                                                              >.</span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffbe00;
-                                                                font-size: 18px;
-                                                              "
-                                                              ><strong
-                                                                >Thank
-                                                                you!</strong
-                                                              ></span
-                                                            >
-                                                          </div>
-                                                          <div></div>
-                                                        </div>
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="spacer"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="7770fdab-634a-4f62-a277-1c66b2646d8d"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 0px 0px 20px
-                                                            0px;
-                                                        "
-                                                        role="module-content"
-                                                        bgcolor="#ffffff"
-                                                      ></td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  class="module"
-                                                  data-role="module-button"
-                                                  data-type="button"
-                                                  role="module"
-                                                  style="table-layout: fixed"
-                                                  width="100%"
-                                                  data-muid="d050540f-4672-4f31-80d9-b395dc08abe1"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        align="center"
-                                                        bgcolor="#ffffff"
-                                                        class="outer-td"
-                                                        style="
-                                                          padding: 0px 0px 0px
-                                                            0px;
-                                                          background-color: #ffffff;
-                                                        "
-                                                      >
-                                                        <table
-                                                          border="0"
-                                                          cellpadding="0"
-                                                          cellspacing="0"
-                                                          class="wrapper-mobile"
-                                                          style="
-                                                            text-align: center;
-                                                          "
-                                                        >
-                                                          <tbody>
-                                                            <tr>
-                                                              <td
-                                                                align="center"
-                                                                bgcolor="#ffbe00"
-                                                                class="inner-td"
-                                                                style="
-                                                                  border-radius: 6px;
-                                                                  font-size: 16px;
-                                                                  text-align: center;
-                                                                  background-color: inherit;
-                                                                "
-                                                              >
-                                                                <a
-                                                                  href="${urlVerify}"
-                                                                  style="
-                                                                    background-color: #ffbe00;
-                                                                    border: 1px
-                                                                      solid
-                                                                      #ffbe00;
-                                                                    border-color: #ffbe00;
-                                                                    border-radius: 0px;
-                                                                    border-width: 1px;
-                                                                    color: #000000;
-                                                                    display: inline-block;
-                                                                    font-size: 14px;
-                                                                    font-weight: normal;
-                                                                    letter-spacing: 0px;
-                                                                    line-height: normal;
-                                                                    padding: 12px
-                                                                      40px 12px
-                                                                      40px;
-                                                                    text-align: center;
-                                                                    text-decoration: none;
-                                                                    border-style: solid;
-                                                                    font-family: inherit;
-                                                                  "
-                                                                  target="_blank"
-                                                                  >Verify Email
-                                                                  Now</a
-                                                                >
-                                                              </td>
-                                                            </tr>
-                                                          </tbody>
-                                                        </table>
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="spacer"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="7770fdab-634a-4f62-a277-1c66b2646d8d.1"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 0px 0px 50px
-                                                            0px;
-                                                        "
-                                                        role="module-content"
-                                                        bgcolor="#ffffff"
-                                                      ></td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="text"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="a265ebb9-ab9c-43e8-9009-54d6151b1600"
-                                                  data-mc-module-version="2019-10-22"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 50px 30px
-                                                            50px 30px;
-                                                          line-height: 22px;
-                                                          text-align: inherit;
-                                                          background-color: #6e6e6e;
-                                                        "
-                                                        height="100%"
-                                                        valign="top"
-                                                        bgcolor="#6e6e6e"
-                                                        role="module-content"
-                                                      >
-                                                        <div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffffff;
-                                                                font-size: 18px;
-                                                              "
-                                                              ><strong
-                                                                >Here’s what
-                                                                happens
-                                                                next:</strong
-                                                              ></span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <br />
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffffff;
-                                                                font-size: 18px;
-                                                              "
-                                                              >1. Upload your
-                                                              resume and we'll
-                                                              keep it on file
-                                                              for every job
-                                                              submission.</span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <br />
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffffff;
-                                                                font-size: 18px;
-                                                              "
-                                                              >2. Submit and
-                                                              edit personalized
-                                                              cover letters for
-                                                              every job you
-                                                              apply to.</span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <br />
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffffff;
-                                                                font-size: 18px;
-                                                              "
-                                                              >3. Get access to
-                                                              our career coaches
-                                                              when you need 1:1
-                                                              help with your job
-                                                              application.</span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffbe00;
-                                                                font-size: 18px;
-                                                              "
-                                                              ><strong
-                                                                >+ much
-                                                                more!</strong
-                                                              ></span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <br />
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffffff;
-                                                                font-size: 18px;
-                                                              "
-                                                              >Need support? Our
-                                                              support team is
-                                                              always</span
-                                                            >
-                                                          </div>
-                                                          <div
-                                                            style="
-                                                              font-family: inherit;
-                                                              text-align: center;
-                                                            "
-                                                          >
-                                                            <span
-                                                              style="
-                                                                color: #ffffff;
-                                                                font-size: 18px;
-                                                              "
-                                                              >ready to
-                                                              help!</span
-                                                            >
-                                                          </div>
-                                                          <div></div>
-                                                        </div>
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  class="module"
-                                                  data-role="module-button"
-                                                  data-type="button"
-                                                  role="module"
-                                                  style="table-layout: fixed"
-                                                  width="100%"
-                                                  data-muid="d050540f-4672-4f31-80d9-b395dc08abe1.1"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        align="center"
-                                                        bgcolor="#6e6e6e"
-                                                        class="outer-td"
-                                                        style="
-                                                          padding: 0px 0px 0px
-                                                            0px;
-                                                          background-color: #6e6e6e;
-                                                        "
-                                                      >
-                                                        <table
-                                                          border="0"
-                                                          cellpadding="0"
-                                                          cellspacing="0"
-                                                          class="wrapper-mobile"
-                                                          style="
-                                                            text-align: center;
-                                                          "
-                                                        >
-                                                          <tbody>
-                                                            <tr>
-                                                              <td
-                                                                align="center"
-                                                                bgcolor="#ffbe00"
-                                                                class="inner-td"
-                                                                style="
-                                                                  border-radius: 6px;
-                                                                  font-size: 16px;
-                                                                  text-align: center;
-                                                                  background-color: inherit;
-                                                                "
-                                                              >
-                                                                <a
-                                                                  href=""
-                                                                  style="
-                                                                    background-color: #ffbe00;
-                                                                    border: 1px
-                                                                      solid
-                                                                      #ffbe00;
-                                                                    border-color: #ffbe00;
-                                                                    border-radius: 0px;
-                                                                    border-width: 1px;
-                                                                    color: #000000;
-                                                                    display: inline-block;
-                                                                    font-size: 14px;
-                                                                    font-weight: normal;
-                                                                    letter-spacing: 0px;
-                                                                    line-height: normal;
-                                                                    padding: 12px
-                                                                      40px 12px
-                                                                      40px;
-                                                                    text-align: center;
-                                                                    text-decoration: none;
-                                                                    border-style: solid;
-                                                                    font-family: inherit;
-                                                                  "
-                                                                  target="_blank"
-                                                                  >Contact
-                                                                  Support</a
-                                                                >
-                                                              </td>
-                                                            </tr>
-                                                          </tbody>
-                                                        </table>
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                                <table
-                                                  class="module"
-                                                  role="module"
-                                                  data-type="spacer"
-                                                  border="0"
-                                                  cellpadding="0"
-                                                  cellspacing="0"
-                                                  width="100%"
-                                                  style="table-layout: fixed"
-                                                  data-muid="c37cc5b7-79f4-4ac8-b825-9645974c984e"
-                                                >
-                                                  <tbody>
-                                                    <tr>
-                                                      <td
-                                                        style="
-                                                          padding: 0px 0px 30px
-                                                            0px;
-                                                        "
-                                                        role="module-content"
-                                                        bgcolor="6E6E6E"
-                                                      ></td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                                <div
-                                  data-role="module-unsubscribe"
-                                  class="module"
-                                  role="module"
-                                  data-type="unsubscribe"
-                                  style="
-                                    color: #444444;
-                                    font-size: 12px;
-                                    line-height: 20px;
-                                    padding: 16px 16px 16px 16px;
-                                    text-align: Center;
-                                  "
-                                  data-muid="4e838cf3-9892-4a6d-94d6-170e474d21e5"
-                                >
-                                  <div class="Unsubscribe--addressLine">
-                                    <p
-                                      class="Unsubscribe--senderName"
-                                      style="font-size: 12px; line-height: 20px"
-                                    >
-                                      {{Sender_Name}}
-                                    </p>
-                                    <p
-                                      style="font-size: 12px; line-height: 20px"
-                                    >
-                                      <span class="Unsubscribe--senderAddress"
-                                        >{{Sender_Address}}</span
-                                      >,
-                                      <span class="Unsubscribe--senderCity"
-                                        >{{Sender_City}}</span
-                                      >,
-                                      <span class="Unsubscribe--senderState"
-                                        >{{Sender_State}}</span
-                                      >
-                                      <span class="Unsubscribe--senderZip"
-                                        >{{Sender_Zip}}</span
-                                      >
-                                    </p>
-                                  </div>
-                                  <p style="font-size: 12px; line-height: 20px">
-                                    <a
-                                      class="Unsubscribe--unsubscribeLink"
-                                      href="{{{unsubscribe}}}"
-                                      target="_blank"
-                                      style=""
-                                      >Unsubscribe</a
-                                    >
-                                    -
-                                    <a
-                                      href="{{{unsubscribe_preferences}}}"
-                                      target="_blank"
-                                      class="Unsubscribe--unsubscribePreferences"
-                                      style=""
-                                      >Unsubscribe Preferences</a
-                                    >
-                                  </p>
-                                </div>
-                                <table
                                   border="0"
-                                  cellpadding="0"
-                                  cellspacing="0"
-                                  class="module"
-                                  data-role="module-button"
-                                  data-type="button"
-                                  role="module"
-                                  style="table-layout: fixed"
-                                  width="100%"
-                                  data-muid="550f60a9-c478-496c-b705-077cf7b1ba9a"
                                 >
-                                  <tbody>
-                                    <tr>
-                                      <td
+                                  <tr>
+                                    <td
+                                      style="
+                                        padding-right: 0px;
+                                        padding-left: 0px;
+                                      "
+                                      align="center"
+                                    >
+                                      <img
                                         align="center"
-                                        bgcolor=""
-                                        class="outer-td"
-                                        style="padding: 0px 0px 20px 0px"
+                                        border="0"
+                                        src="https://i.ibb.co/JKnG9Tt/image-4.png"
+                                        alt="Logo"
+                                        title="Logo"
+                                        style="
+                                          outline: none;
+                                          text-decoration: none;
+                                          -ms-interpolation-mode: bicubic;
+                                          clear: both;
+                                          display: inline-block !important;
+                                          border: none;
+                                          height: auto;
+                                          float: none;
+                                          width: 30%;
+                                          max-width: 180px;
+                                        "
+                                        width="180"
+                                        class="v-src-width v-src-max-width"
+                                      />
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 10px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <table
+                                  height="0px"
+                                  align="center"
+                                  border="0"
+                                  cellpadding="0"
+                                  cellspacing="0"
+                                  width="100%"
+                                  style="
+                                    border-collapse: collapse;
+                                    table-layout: fixed;
+                                    border-spacing: 0;
+                                    mso-table-lspace: 0pt;
+                                    mso-table-rspace: 0pt;
+                                    vertical-align: top;
+                                    border-top: 1px solid #bbbbbb;
+                                    -ms-text-size-adjust: 100%;
+                                    -webkit-text-size-adjust: 100%;
+                                  "
+                                >
+                                  <tbody>
+                                    <tr style="vertical-align: top">
+                                      <td
+                                        style="
+                                          word-break: break-word;
+                                          border-collapse: collapse !important;
+                                          vertical-align: top;
+                                          font-size: 0px;
+                                          line-height: 0px;
+                                          mso-line-height-rule: exactly;
+                                          -ms-text-size-adjust: 100%;
+                                          -webkit-text-size-adjust: 100%;
+                                        "
                                       >
-                                        <table
-                                          border="0"
-                                          cellpadding="0"
-                                          cellspacing="0"
-                                          class="wrapper-mobile"
-                                          style="text-align: center"
-                                        >
-                                          <tbody>
-                                            <tr>
-                                              <td
-                                                align="center"
-                                                bgcolor="#f5f8fd"
-                                                class="inner-td"
-                                                style="
-                                                  border-radius: 6px;
-                                                  font-size: 16px;
-                                                  text-align: center;
-                                                  background-color: inherit;
-                                                "
-                                              >
-                                                <a
-                                                  href="https://sendgrid.com/"
-                                                  style="
-                                                    background-color: #f5f8fd;
-                                                    border: 1px solid #f5f8fd;
-                                                    border-color: #f5f8fd;
-                                                    border-radius: 25px;
-                                                    border-width: 1px;
-                                                    color: #a8b9d5;
-                                                    display: inline-block;
-                                                    font-size: 10px;
-                                                    font-weight: normal;
-                                                    letter-spacing: 0px;
-                                                    line-height: normal;
-                                                    padding: 5px 18px 5px 18px;
-                                                    text-align: center;
-                                                    text-decoration: none;
-                                                    border-style: solid;
-                                                    font-family: helvetica,
-                                                      sans-serif;
-                                                  "
-                                                  target="_blank"
-                                                  >♥ POWERED BY TWILIO
-                                                  SENDGRID</a
-                                                >
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
+                                        <span>&#160;</span>
                                       </td>
                                     </tr>
                                   </tbody>
                                 </table>
                               </td>
                             </tr>
-                          </table>
-                          <!--[if mso]>
-                                  </td>
-                                </tr>
-                              </table>
-                            </center>
-                            <![endif]-->
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </center>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 10px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <h1
+                                  style="
+                                    margin: 0px;
+                                    color: #000000;
+                                    line-height: 140%;
+                                    text-align: center;
+                                    word-wrap: break-word;
+                                    font-weight: normal;
+                                    font-family: 'Rubik', sans-serif;
+                                    font-size: 43px;
+                                  "
+                                >
+                                  Thanks for signing up, <br />${name}
+                                </h1>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 10px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <h1
+                                  style="
+                                    margin: 0px;
+                                    line-height: 140%;
+                                    text-align: center;
+                                    word-wrap: break-word;
+                                    font-weight: normal;
+                                    font-family: 'Rubik', sans-serif;
+                                    font-size: 22px;
+                                  "
+                                >
+                                  Please confirm your email address to access
+                                  your finances app.<br /><strong
+                                    >Thank you!</strong
+                                  >
+                                </h1>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 10px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <div align="center">
+                                  <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Rubik',sans-serif;"><tr><td style="font-family:'Rubik',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:37px; v-text-anchor:middle; width:146px;" arcsize="11%" stroke="f" fillcolor="#ff751d"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Rubik',sans-serif;"><![endif]-->
+                                  <a
+                                    href="${urlVerify}"
+                                    target="_blank"
+                                    style="
+                                      box-sizing: border-box;
+                                      display: inline-block;
+                                      font-family: 'Rubik', sans-serif;
+                                      text-decoration: none;
+                                      -webkit-text-size-adjust: none;
+                                      text-align: center;
+                                      color: #ffffff;
+                                      background-color: #ff751d;
+                                      border-radius: 4px;
+                                      -webkit-border-radius: 4px;
+                                      -moz-border-radius: 4px;
+                                      width: auto;
+                                      max-width: 100%;
+                                      overflow-wrap: break-word;
+                                      word-break: break-word;
+                                      word-wrap: break-word;
+                                      mso-border-alt: none;
+                                    "
+                                  >
+                                    <span
+                                      style="
+                                        display: block;
+                                        padding: 10px 15px;
+                                        line-height: 120%;
+                                      "
+                                      ><strong
+                                        ><span
+                                          style="
+                                            font-size: 14px;
+                                            line-height: 16.8px;
+                                          "
+                                          >Verify Email Now</span
+                                        ></strong
+                                      ></span
+                                    >
+                                  </a>
+                                  <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 30px 10px 30px 20px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <div
+                                  style="
+                                    color: #333333;
+                                    line-height: 130%;
+                                    text-align: left;
+                                    word-wrap: break-word;
+                                  "
+                                >
+                                  <p style="font-size: 14px; line-height: 130%">
+                                    <strong
+                                      ><span
+                                        style="
+                                          font-size: 16px;
+                                          line-height: 20.8px;
+                                        "
+                                        >Kapu$sta_7,</span
+                                      ></strong
+                                    >
+                                  </p>
+                                  <p style="font-size: 14px; line-height: 130%">
+                                    &nbsp;
+                                  </p>
+                                  <p style="font-size: 14px; line-height: 130%">
+                                    <span
+                                      style="
+                                        font-size: 16px;
+                                        line-height: 20.8px;
+                                        font-family: Rubik, sans-serif;
+                                      "
+                                      >Thank you for registering for our
+                                      application,<strong>
+                                        Kapu$ta!
+                                      </strong></span
+                                    >
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 10px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <table
+                                  height="0px"
+                                  align="center"
+                                  border="0"
+                                  cellpadding="0"
+                                  cellspacing="0"
+                                  width="100%"
+                                  style="
+                                    border-collapse: collapse;
+                                    table-layout: fixed;
+                                    border-spacing: 0;
+                                    mso-table-lspace: 0pt;
+                                    mso-table-rspace: 0pt;
+                                    vertical-align: top;
+                                    border-top: 2px solid #939391;
+                                    -ms-text-size-adjust: 100%;
+                                    -webkit-text-size-adjust: 100%;
+                                  "
+                                >
+                                  <tbody>
+                                    <tr style="vertical-align: top">
+                                      <td
+                                        style="
+                                          word-break: break-word;
+                                          border-collapse: collapse !important;
+                                          vertical-align: top;
+                                          font-size: 0px;
+                                          line-height: 0px;
+                                          mso-line-height-rule: exactly;
+                                          -ms-text-size-adjust: 100%;
+                                          -webkit-text-size-adjust: 100%;
+                                        "
+                                      >
+                                        <span>&#160;</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 14px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <div align="center">
+                                  <div style="display: table; max-width: 187px">
+                                    <!--[if (mso)|(IE)]><table width="187" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-collapse:collapse;" align="center"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; mso-table-lspace: 0pt;mso-table-rspace: 0pt; width:187px;"><tr><![endif]-->
+
+                                    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
+                                    <table
+                                      align="left"
+                                      border="0"
+                                      cellspacing="0"
+                                      cellpadding="0"
+                                      width="32"
+                                      height="32"
+                                      style="
+                                        border-collapse: collapse;
+                                        table-layout: fixed;
+                                        border-spacing: 0;
+                                        mso-table-lspace: 0pt;
+                                        mso-table-rspace: 0pt;
+                                        vertical-align: top;
+                                        margin-right: 15px;
+                                      "
+                                    >
+                                      <tbody>
+                                        <tr style="vertical-align: top">
+                                          <td
+                                            align="left"
+                                            valign="middle"
+                                            style="
+                                              word-break: break-word;
+                                              border-collapse: collapse !important;
+                                              vertical-align: top;
+                                            "
+                                          >
+                                            <a
+                                              href="https://facebook.com/"
+                                              title="Facebook"
+                                              target="_blank"
+                                            >
+                                              <img
+                                                src="https://i.ibb.co/2Ywtb0x/image-6.png"
+                                                alt="Facebook"
+                                                title="Facebook"
+                                                width="32"
+                                                style="
+                                                  outline: none;
+                                                  text-decoration: none;
+                                                  -ms-interpolation-mode: bicubic;
+                                                  clear: both;
+                                                  display: block !important;
+                                                  border: none;
+                                                  height: auto;
+                                                  float: none;
+                                                  max-width: 32px !important;
+                                                "
+                                              />
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!--[if (mso)|(IE)]></td><![endif]-->
+
+                                    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
+                                    <table
+                                      align="left"
+                                      border="0"
+                                      cellspacing="0"
+                                      cellpadding="0"
+                                      width="32"
+                                      height="32"
+                                      style="
+                                        border-collapse: collapse;
+                                        table-layout: fixed;
+                                        border-spacing: 0;
+                                        mso-table-lspace: 0pt;
+                                        mso-table-rspace: 0pt;
+                                        vertical-align: top;
+                                        margin-right: 15px;
+                                      "
+                                    >
+                                      <tbody>
+                                        <tr style="vertical-align: top">
+                                          <td
+                                            align="left"
+                                            valign="middle"
+                                            style="
+                                              word-break: break-word;
+                                              border-collapse: collapse !important;
+                                              vertical-align: top;
+                                            "
+                                          >
+                                            <a
+                                              href="https://twitter.com/"
+                                              title="Twitter"
+                                              target="_blank"
+                                            >
+                                              <img
+                                                src="https://i.ibb.co/qMLR1Px/image-1.png"
+                                                alt="Twitter"
+                                                title="Twitter"
+                                                width="32"
+                                                style="
+                                                  outline: none;
+                                                  text-decoration: none;
+                                                  -ms-interpolation-mode: bicubic;
+                                                  clear: both;
+                                                  display: block !important;
+                                                  border: none;
+                                                  height: auto;
+                                                  float: none;
+                                                  max-width: 32px !important;
+                                                "
+                                              />
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!--[if (mso)|(IE)]></td><![endif]-->
+
+                                    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
+                                    <table
+                                      align="left"
+                                      border="0"
+                                      cellspacing="0"
+                                      cellpadding="0"
+                                      width="32"
+                                      height="32"
+                                      style="
+                                        border-collapse: collapse;
+                                        table-layout: fixed;
+                                        border-spacing: 0;
+                                        mso-table-lspace: 0pt;
+                                        mso-table-rspace: 0pt;
+                                        vertical-align: top;
+                                        margin-right: 15px;
+                                      "
+                                    >
+                                      <tbody>
+                                        <tr style="vertical-align: top">
+                                          <td
+                                            align="left"
+                                            valign="middle"
+                                            style="
+                                              word-break: break-word;
+                                              border-collapse: collapse !important;
+                                              vertical-align: top;
+                                            "
+                                          >
+                                            <a
+                                              href="https://linkedin.com/"
+                                              title="LinkedIn"
+                                              target="_blank"
+                                            >
+                                              <img
+                                                src="https://i.ibb.co/fGTy5Zt/image-2.png"
+                                                alt="LinkedIn"
+                                                title="LinkedIn"
+                                                width="32"
+                                                style="
+                                                  outline: none;
+                                                  text-decoration: none;
+                                                  -ms-interpolation-mode: bicubic;
+                                                  clear: both;
+                                                  display: block !important;
+                                                  border: none;
+                                                  height: auto;
+                                                  float: none;
+                                                  max-width: 32px !important;
+                                                "
+                                              />
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!--[if (mso)|(IE)]></td><![endif]-->
+
+                                    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 0px;" valign="top"><![endif]-->
+                                    <table
+                                      align="left"
+                                      border="0"
+                                      cellspacing="0"
+                                      cellpadding="0"
+                                      width="32"
+                                      height="32"
+                                      style="
+                                        border-collapse: collapse;
+                                        table-layout: fixed;
+                                        border-spacing: 0;
+                                        mso-table-lspace: 0pt;
+                                        mso-table-rspace: 0pt;
+                                        vertical-align: top;
+                                        margin-right: 0px;
+                                      "
+                                    >
+                                      <tbody>
+                                        <tr style="vertical-align: top">
+                                          <td
+                                            align="left"
+                                            valign="middle"
+                                            style="
+                                              word-break: break-word;
+                                              border-collapse: collapse !important;
+                                              vertical-align: top;
+                                            "
+                                          >
+                                            <a
+                                              href="https://instagram.com/"
+                                              title="Instagram"
+                                              target="_blank"
+                                            >
+                                              <img
+                                                src="https://i.ibb.co/MDKTx6W/image-3.png"
+                                                alt="Instagram"
+                                                title="Instagram"
+                                                width="32"
+                                                style="
+                                                  outline: none;
+                                                  text-decoration: none;
+                                                  -ms-interpolation-mode: bicubic;
+                                                  clear: both;
+                                                  display: block !important;
+                                                  border: none;
+                                                  height: auto;
+                                                  float: none;
+                                                  max-width: 32px !important;
+                                                "
+                                              />
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!--[if (mso)|(IE)]></td><![endif]-->
+
+                                    <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 10px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <div
+                                  style="
+                                    color: #828080;
+                                    line-height: 160%;
+                                    text-align: center;
+                                    word-wrap: break-word;
+                                  "
+                                >
+                                  <p style="font-size: 14px; line-height: 160%">
+                                    01000, Kyiv, Ukraine
+                                  </p>
+                                  <p style="font-size: 14px; line-height: 160%">
+                                    KAPUSTA University | Privacy Policy
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 0px 10px 20px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                                <div
+                                  style="
+                                    color: #828080;
+                                    line-height: 140%;
+                                    text-align: center;
+                                    word-wrap: break-word;
+                                  "
+                                >
+                                  <p style="font-size: 14px; line-height: 140%">
+                                    &copy; KAPU$TA University. All Rights
+                                    Reserved.
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <!--[if (!mso)&(!IE)]><!-->
+                      </div>
+                      <!--<![endif]-->
+                    </div>
+                  </div>
+                  <!--[if (mso)|(IE)]></td><![endif]-->
+                  <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
+                </div>
+              </div>
+            </div>
+
+            <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!--[if mso]></div><![endif]-->
+    <!--[if IE]></div><![endif]-->
   </body>
-</html>
-`
+</html>`
 }
 
 module.exports = mailVerify

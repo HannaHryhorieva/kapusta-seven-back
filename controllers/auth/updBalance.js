@@ -1,15 +1,19 @@
+const { NotFound } = require('http-errors')
 const { User } = require('../../model')
 
 const updateBalance = async (req, res) => {
-  const { _id } = req.user
+  const { idUser } = req.params
   const { balance } = req.body
-  await User.findByIdAndUpdate(_id, { balance })
+  const user = await User.findByIdAndUpdate(idUser, { balance }, { new: true })
+  if (!user) {
+    throw new NotFound('Not found')
+  }
 
   res.json({
     status: 'success',
-    code: 201,
+    code: 200,
     data: {
-      balance
+      balance: user.balance
     }
   })
 }

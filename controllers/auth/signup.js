@@ -1,18 +1,20 @@
 const { Conflict } = require('http-errors')
 const { nanoid } = require('nanoid')
+const moment = require('moment')
 const { User } = require('../../model')
 
 const mailVerify = require('../../public/mailVerify')
 const sendMailVerify = require('../../helpers')
 
 const registrationUser = async (req, res) => {
-  const { email, password, balance, name } = req.body
+  const { email, password, name } = req.body
+  const date = moment().format('DD.MM.YYYY_hh:mm:ss')
   const user = await User.findOne({ email })
   if (user) {
     throw new Conflict(`Email ${email} in use`)
   }
   const verificationToken = nanoid()
-  const newUser = new User({ email, verificationToken, balance, name })
+  const newUser = new User({ email, verificationToken, name, date })
   newUser.setPassword(password)
   await newUser.save()
 
@@ -26,10 +28,14 @@ const registrationUser = async (req, res) => {
 
   res.json({
     status: 'Success',
-    code: 201,
+    code: 200,
     data: {
+      id: newUser._id,
+      date: newUser.date,
       email: newUser.email,
-      balance: newUser.balance
+      name: newUser.name,
+      verificationToken,
+
     },
   })
 }

@@ -14,6 +14,8 @@ const verify = async (req, res) => {
   })
 
   res.json({
+    status: 'Success',
+    code: 200,
     message: 'Verify success',
   })
 }
