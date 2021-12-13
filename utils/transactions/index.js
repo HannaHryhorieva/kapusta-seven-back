@@ -22,6 +22,7 @@ const prepareTransactionsByMonth = (data) =>
 const prepareTransactionByCategory = (data) =>
   data.reduce(
     (acc, item) => ({
+      ...acc,
       [item.category]: {
         data: [...(acc[item.category]?.data || []), item],
         total: (acc[item.category]?.total || 0) + item.amount,

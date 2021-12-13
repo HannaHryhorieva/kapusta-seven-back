@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { CATEGORY_ENUM } = require('./constants')
 
 const transactionSchema = Schema(
   {
@@ -20,6 +21,7 @@ const transactionSchema = Schema(
     },
     category: {
       type: String,
+      enum: CATEGORY_ENUM,
       required: true,
     },
     amount: {
