@@ -1,9 +1,10 @@
 const axios = require('axios')
 const queryString = require('query-string')
-const { Conflict } = require('http-errors')
-const { User } = require('../../model')
-const mailVerify = require('../../public/mailVerify')
-const sendMailVerify = require('../../helpers')
+// const { Conflict } = require('http-errors')
+// const { User } = require('../../model')
+// const mailVerify = require('../../public/mailVerify')
+// const sendMailVerify = require('../../helpers')
+const signupGoogleAuth = require('./signupGoogle')
 
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
@@ -43,35 +44,36 @@ const googleRedirect = async (req, res) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     }
   })
+  signupGoogleAuth(userData)
+  // const { id: verificationToken, name, email, picture } = userData.data
+  // const { Authorization: token } = userData.config.headers
+  // console.log(token)
+  // const user = await User.findOne({ email })
+  // if (user) {
+  //   throw new Conflict(`Email ${email} in use`)
+  // }
+  // const newUser = new User({ email, name, picture, token, verificationToken })
 
-  const { id: verificationToken, name, email, picture } = userData.data
-  const { Authorization: token } = userData.config.headers
-  const user = await User.findOne({ email })
-  if (user) {
-    throw new Conflict(`Email ${email} in use`)
-  }
-  const newUser = new User({ email, name, picture, token, verificationToken })
+  // const sendMail = {
+  //   to: email,
+  //   subject: 'Confirmation of registration',
+  //   html: `${mailVerify(verificationToken, name)}`,
 
-  await newUser.save()
-  const sendMail = {
-    to: email,
-    subject: 'Confirmation of registration',
-    html: `${mailVerify(verificationToken, name)}`,
-
-  }
-  await sendMailVerify(sendMail)
-  res.json({
-    status: 'Success',
-    code: 200,
-    data: {
-      token: newUser.token,
-      email: newUser.email,
-      name: newUser.name,
-      picture: newUser.picture
-    },
-  })
-
-  return res.redirect(`${process.env.FRONTEND_URL}?${token}`)
+  // }
+  // await sendMailVerify(sendMail)
+  // await newUser.save()
+  // res.json({
+  //   status: 'Success',
+  //   code: 200,
+  //   data: {
+  //     token: newUser.token,
+  //     email: newUser.email,
+  //     name: newUser.name,
+  //     picture: newUser.picture
+  //   },
+  // })
+  // console.log(userData)
+  return res.redirect(`${process.env.FRONTEND_URL}`)
 }
 
 module.exports = {

@@ -19,7 +19,7 @@ const sendMailVerify = async(mail) => {
 
   await transporter
     .sendMail(emailOptions)
-    .then((info) => console.log(info))
+    .then((info) => console.log(info.accepted))
     .catch((err) => console.log(err))
 }
 module.exports = sendMailVerify
