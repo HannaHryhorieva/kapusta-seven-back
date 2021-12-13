@@ -22,7 +22,10 @@ const userSchema = Schema({
   },
   balance: {
     type: Number,
-    default: null,
+    default: 0,
+  },
+  date: {
+    type: String,
   },
   token: {
     type: String,

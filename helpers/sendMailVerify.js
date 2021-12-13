@@ -1,8 +1,7 @@
 const nodemailer = require('nodemailer')
 require('dotenv').config()
 
-const sendMailVerify = (mail) => {
-  console.log(mail)
+const sendMailVerify = async(mail) => {
   const config = {
     host: 'smtp.gmail.com',
     port: 465,
@@ -15,11 +14,10 @@ const sendMailVerify = (mail) => {
 
   const transporter = nodemailer.createTransport(config)
   const emailOptions = {
-    ...mail,
-    from: 'supp0rt.kapusta@gmail.com',
+    from: 'supp0rt.kapusta@gmail.com', ...mail,
   }
 
-  return transporter
+  await transporter
     .sendMail(emailOptions)
     .then((info) => console.log(info))
     .catch((err) => console.log(err))

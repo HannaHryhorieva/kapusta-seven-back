@@ -1,8 +1,9 @@
 const axios = require('axios')
 const queryString = require('query-string')
-// const URL = require('url')
-
+const { Conflict } = require('http-errors')
 const { User } = require('../../model')
+const mailVerify = require('../../public/mailVerify')
+const sendMailVerify = require('../../helpers')
 
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
@@ -42,18 +43,26 @@ const googleRedirect = async (req, res) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     }
   })
-  // const user = await User.findOne({ email })
-  const { id, name, email, picture } = userData.data
-  const { Authorization } = userData.config.headers
-  const token = Authorization
-  const verificationToken = id
+
+  const { id: verificationToken, name, email, picture } = userData.data
+  const { Authorization: token } = userData.config.headers
+  const user = await User.findOne({ email })
+  if (user) {
+    throw new Conflict(`Email ${email} in use`)
+  }
   const newUser = new User({ email, name, picture, token, verificationToken })
 
   await newUser.save()
+  const sendMail = {
+    to: email,
+    subject: 'Confirmation of registration',
+    html: `${mailVerify(verificationToken, name)}`,
 
+  }
+  await sendMailVerify(sendMail)
   res.json({
     status: 'Success',
-    code: 201,
+    code: 200,
     data: {
       token: newUser.token,
       email: newUser.email,
@@ -61,8 +70,8 @@ const googleRedirect = async (req, res) => {
       picture: newUser.picture
     },
   })
-  console.log(userData)
-  return res.redirect(`${process.env.FRONTEND_URL}?email=${userData.data.email}`)
+
+  return res.redirect(`${process.env.FRONTEND_URL}?${token}`)
 }
 
 module.exports = {
