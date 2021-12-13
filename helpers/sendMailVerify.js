@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer')
 require('dotenv').config()
 
 const sendMailVerify = async(mail) => {
-  console.log(mail)
   const config = {
     host: 'smtp.gmail.com',
     port: 465,

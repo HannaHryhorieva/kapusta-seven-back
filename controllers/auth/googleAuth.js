@@ -60,7 +60,6 @@ const googleRedirect = async (req, res) => {
 
   }
   await sendMailVerify(sendMail)
-  console.log(userData)
   res.json({
     status: 'Success',
     code: 200,
