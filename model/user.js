@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose')
+const bcrypt = require('bcryptjs')
+
 const userSchema = Schema({
   email: {
     type: String,
@@ -7,7 +9,16 @@ const userSchema = Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: [false, 'Password is required'],
+  },
+  name: {
+    type: String,
+    required: false,
+    default: 'User Name'
+  },
+  picture: {
+    type: String,
+    required: false,
   },
   balance: {
     type: Number,
@@ -30,6 +41,13 @@ const userSchema = Schema({
 {
   versionKey: false,
 })
+
+userSchema.methods.setPassword = function (password) {
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+}
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compareSync(password, this.password)
+}
 
 const User = model('user', userSchema)
 
