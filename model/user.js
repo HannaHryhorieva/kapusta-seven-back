@@ -21,7 +21,7 @@ const userSchema = Schema({
     required: false,
   },
   balance: {
-    type: Number,
+    type: Number.parseFloat(0E-2),
     default: 0,
   },
   date: {

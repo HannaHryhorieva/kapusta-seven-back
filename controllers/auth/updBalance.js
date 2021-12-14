@@ -8,7 +8,6 @@ const updateBalance = async (req, res) => {
   if (!user) {
     throw new NotFound('Not found')
   }
-
   res.json({
     status: 'success',
     code: 200,

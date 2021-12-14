@@ -18,4 +18,6 @@ router.post('/logout', authenticate, controllerWrapper(authCtr.logout))
 
 router.patch('/balance/:idUser', authenticate, controllerWrapper(authCtr.updBalance))
 
+router.get('/users/:userId', authenticate, controllerWrapper(authCtr.getUser))
+
 module.exports = router
