@@ -10,7 +10,9 @@ module.exports = async (req, res, next) => {
     owner: _id,
   })
 
-  if (!transaction) next(new NotFound('Transaction not found!'))
+  if (!transaction) {
+    return next(new NotFound('Transaction not found!'))
+  }
 
   const { isIncome, amount } = transaction
 
