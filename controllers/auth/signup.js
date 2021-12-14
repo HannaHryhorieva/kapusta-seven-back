@@ -8,7 +8,7 @@ const sendMailVerify = require('../../helpers')
 
 const registrationUser = async (req, res) => {
   const { email, password, name } = req.body
-  const date = moment().format('DD.MM.YYYY_hh:mm:ss')
+  const date = moment().format('DD.MM.YYYY_hh:mm:ss a')
   const user = await User.findOne({ email })
   if (user) {
     throw new Conflict(`Email ${email} in use`)

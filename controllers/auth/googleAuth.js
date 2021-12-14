@@ -57,21 +57,20 @@ const googleRedirect = async (req, res) => {
     to: email,
     subject: 'Confirmation of registration',
     html: `${mailVerify(verificationToken, name)}`,
-
   }
   await sendMailVerify(sendMail)
-  res.json({
-    status: 'Success',
-    code: 200,
-    data: {
-      token: newUser.token,
-      email: newUser.email,
-      name: newUser.name,
-      picture: newUser.picture
-    },
-  })
 
-  return res.redirect(`${process.env.FRONTEND_URL}?${token}`)
+  // res.json({
+  //   status: 'Success',
+  //   code: 200,
+  //   data: {
+  //     token: newUser.token,
+  //     email: newUser.email,
+  //     name: newUser.name,
+  //     picture: newUser.picture
+  //   },
+  // })
+  return res.redirect(`${process.env.FRONTEND_URL}`)
 }
 
 module.exports = {
