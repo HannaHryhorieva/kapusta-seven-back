@@ -31,10 +31,23 @@ const prepareTransactionByCategory = (data) =>
     {}
   )
 
+const getCurrDate = () => {
+  const date = new Date()
+
+  const month = date.getUTCMonth()
+  const day = date.getUTCDate()
+  const year = date.getUTCFullYear()
+  const hours = date.getUTCHours()
+  const minutes = date.getUTCMinutes()
+
+  return { month, day, year, hours, minutes, date }
+}
+
 module.exports = {
   transactionsUtils: {
     sortTransactionsByType,
     prepareTransactionsByMonth,
     prepareTransactionByCategory,
+    getCurrDate,
   },
 }

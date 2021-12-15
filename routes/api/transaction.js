@@ -20,6 +20,11 @@ router.get(
   authenticate,
   controllerWrapper(transactionController.byCategory)
 )
+router.get(
+  '/byMonth/:year/:month',
+  authenticate,
+  controllerWrapper(transactionController.byMonth)
+)
 
 router.post(
   '/',

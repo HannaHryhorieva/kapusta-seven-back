@@ -36,6 +36,10 @@ const transactionSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: 'user',
     },
+    timestamp: {
+      type: Number,
+      default: Date.now(),
+    },
   },
   {
     versionKey: false,
