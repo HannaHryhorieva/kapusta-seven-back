@@ -1,4 +1,4 @@
-const { NotFound } = require('http-errors')
+const { NotFound, BadRequest } = require('http-errors')
 const { Transaction, User } = require('../../model')
 
 module.exports = async (req, res, next) => {
@@ -15,6 +15,12 @@ module.exports = async (req, res, next) => {
   }
 
   const { isIncome, amount } = transaction
+
+  if (isIncome && balance < amount) {
+    return next(
+      new BadRequest('Deleting of this transaction make your balance negative')
+    )
+  }
 
   await Transaction.findByIdAndRemove(id)
 
