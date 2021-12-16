@@ -6,7 +6,7 @@ const updateBalance = async (req, res) => {
   const { balance } = req.body
   const user = await User.findByIdAndUpdate(idUser, { balance }, { new: true })
   if (!user) {
-    throw new NotFound('Not found')
+    throw new NotFound('User with this id not found')
   }
   res.json({
     status: 'success',

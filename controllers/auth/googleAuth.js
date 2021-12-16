@@ -1,6 +1,6 @@
 const axios = require('axios')
 const queryString = require('query-string')
-const { Conflict } = require('http-errors')
+// const { Conflict, BadRequest } = require('http-errors')
 const { User } = require('../../model')
 const mailVerify = require('../../public/mailVerify')
 const sendMailVerify = require('../../helpers')
@@ -20,7 +20,7 @@ const googleAuth = async (req, res) => {
   return res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`)
 }
 
-const googleRedirect = async (req, res) => {
+const googleRedirect = async (req, res, next) => {
   const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`
   const urlObj = new URL(fullUrl)
   const urlParams = queryString.parse(urlObj.search)
@@ -46,13 +46,24 @@ const googleRedirect = async (req, res) => {
 
   const { id: verificationToken, name, email, picture } = userData.data
   const { Authorization: token } = userData.config.headers
-  const user = await User.findOne({ email })
-  if (user) {
-    throw new Conflict(`Email ${email} in use`)
-  }
+
   const newUser = new User({ email, name, picture, token, verificationToken })
 
   await newUser.save()
+  console.log('newUser', newUser)
+  const user = await User.findOne({ email })
+  // if (user && !user.verify) {
+  //   throw new BadRequest('Not Verified. Please enter your email and confirm registration')
+  // }
+  // const user = await User.findOne({ email })
+  console.log('User', user)
+  if (!user.isGoogle) {
+    await User.findByIdAndUpdate(user._id, { isGoogle: true })
+  }
+  if (user && !user.token) {
+    await User.findByIdAndUpdate(user._id, { token })
+  }
+
   const sendMail = {
     to: email,
     subject: 'Confirmation of registration',
@@ -60,17 +71,7 @@ const googleRedirect = async (req, res) => {
   }
   await sendMailVerify(sendMail)
 
-  // res.json({
-  //   status: 'Success',
-  //   code: 200,
-  //   data: {
-  //     token: newUser.token,
-  //     email: newUser.email,
-  //     name: newUser.name,
-  //     picture: newUser.picture
-  //   },
-  // })
-  return res.redirect(`${process.env.FRONTEND_URL}`)
+  return res.redirect(`${process.env.FRONTEND_URL}?accessToken=${token}`)
 }
 
 module.exports = {
