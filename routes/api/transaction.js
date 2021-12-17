@@ -1,13 +1,14 @@
 const express = require('express')
 const { transactionController } = require('../../controllers/transaction')
 const { transactionValidations } = require('../../validations/transaction')
-const router = express.Router()
-
 const {
   controllerWrapper,
   validate,
   authenticate,
+  createTransactionGuard,
 } = require('../../middlewares')
+
+const router = express.Router()
 
 router.get('/', authenticate, controllerWrapper(transactionController.getAll))
 router.get(
@@ -30,6 +31,7 @@ router.post(
   '/',
   authenticate,
   validate(transactionValidations.create),
+  createTransactionGuard,
   controllerWrapper(transactionController.create)
 )
 
