@@ -6,7 +6,7 @@ const verify = async (req, res) => {
   const { verificationToken } = req.params
   const user = await User.findOne({ verificationToken })
   if (!user) {
-    throw new NotFound()
+    throw new NotFound('Verification token not found')
   }
   await User.findByIdAndUpdate(user._id, {
     verificationToken: null,

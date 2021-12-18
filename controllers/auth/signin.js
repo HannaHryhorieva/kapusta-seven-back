@@ -1,4 +1,4 @@
-const { BadRequest, Unauthorized } = require('http-errors')
+const { BadRequest, Unauthorized, Forbidden } = require('http-errors')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -18,6 +18,9 @@ const login = async (req, res) => {
   }
   if (!user.verify) {
     throw new BadRequest('Not Verified')
+  }
+  if (user.isGoogle) {
+    throw new Forbidden('Login failed. Please sign in with your Google account')
   }
   const payload = {
     id: user._id,
