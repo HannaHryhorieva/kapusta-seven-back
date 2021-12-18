@@ -7,7 +7,9 @@ module.exports = async (req, res, next) => {
   const transaction = await new Transaction({ ...req.body, owner: _id })
 
   await User.findByIdAndUpdate(_id, {
-    balance: isIncome ? Number(balance) + Number(amount) : balance - amount,
+    balance: isIncome
+      ? Number(balance) + Number(amount)
+      : Number(balance) - Number(amount),
   })
 
   await transaction.save()
