@@ -4,6 +4,8 @@ const router = express.Router()
 const { controllerWrapper, authenticate } = require('../../middlewares')
 const { authCtr } = require('../../controllers/')
 
+router.get('/', controllerWrapper(authCtr.getAllUsers))
+
 router.post('/signup', controllerWrapper(authCtr.registrationUser))
 
 router.get('/google', controllerWrapper(authCtr.googleAuth))

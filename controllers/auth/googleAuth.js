@@ -1,6 +1,6 @@
 const axios = require('axios')
 const queryString = require('query-string')
-// const { Conflict, BadRequest } = require('http-errors')
+const { BadRequest } = require('http-errors')
 const { User } = require('../../model')
 const mailVerify = require('../../public/mailVerify')
 const sendMailVerify = require('../../helpers')
@@ -46,21 +46,15 @@ const googleRedirect = async (req, res, next) => {
 
   const { id: verificationToken, name, email, picture } = userData.data
   const { Authorization: token } = userData.config.headers
-
-  const newUser = new User({ email, name, picture, token, verificationToken })
-
-  await newUser.save()
-  console.log('newUser', newUser)
   const user = await User.findOne({ email })
-  // if (user && !user.verify) {
-  //   throw new BadRequest('Not Verified. Please enter your email and confirm registration')
-  // }
-  // const user = await User.findOne({ email })
-  console.log('User', user)
-  if (!user.isGoogle) {
-    await User.findByIdAndUpdate(user._id, { isGoogle: true })
+  if (!user) {
+    const newUser = new User({ email, name, picture, token, verificationToken, isGoogle: true })
+    await newUser.save()
   }
-  if (user && !user.token) {
+  if (user && !user.verify) {
+    throw new BadRequest('Not Verified. Please enter your email and confirm registration')
+  }
+  if (user && user.token === null) {
     await User.findByIdAndUpdate(user._id, { token })
   }
 

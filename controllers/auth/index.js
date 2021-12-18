@@ -5,6 +5,7 @@ const verify = require('./verify')
 const updBalance = require('./updBalance')
 const logout = require('./logout')
 const getUser = require('./getUser')
+const getAllUsers = require('./getAllUsers')
 
 module.exports = {
   registrationUser,
@@ -14,5 +15,6 @@ module.exports = {
   verify,
   updBalance,
   logout,
-  getUser
+  getUser,
+  getAllUsers
 }
