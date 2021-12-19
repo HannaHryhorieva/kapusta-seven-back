@@ -18,7 +18,7 @@ router.post('/signin', controllerWrapper(authCtr.login))
 
 router.post('/logout', authenticate, controllerWrapper(authCtr.logout))
 
-router.patch('/balance/:idUser', authenticate, controllerWrapper(authCtr.updBalance))
+router.patch('/balance', authenticate, controllerWrapper(authCtr.updBalance))
 
 router.get('/users/:userId', authenticate, controllerWrapper(authCtr.getUser))
 

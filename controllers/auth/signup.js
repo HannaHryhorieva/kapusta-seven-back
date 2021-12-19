@@ -28,14 +28,12 @@ const registrationUser = async (req, res) => {
 
   res.json({
     status: 'Success',
-    code: 200,
+    code: 201,
     data: {
-      id: newUser._id,
+      _id: newUser._id,
       date: newUser.date,
       email: newUser.email,
       name: newUser.name,
-      verificationToken,
-
     },
   })
 }
