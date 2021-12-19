@@ -23,9 +23,9 @@ const createTransactionGuard = async (req, res, next) => {
       year = currYear,
       day = currDay,
     } = req.body
-
+    const amountNum = Number(amount)
     const requestedDate = new Date(
-      Date.UTC(year, month - 1, day, currHours, currMinutes)
+      Date.UTC(year, month - 1, day, currHours, currMinutes),
     )
     const timestamp = requestedDate.getTime()
 
@@ -37,7 +37,7 @@ const createTransactionGuard = async (req, res, next) => {
       return next(new BadRequest('Impossible date'))
     }
 
-    if (!isIncome && amount > balance) {
+    if (!isIncome && amountNum > balance) {
       return next(new BadRequest('Amount is greater than balance'))
     }
 
@@ -47,7 +47,7 @@ const createTransactionGuard = async (req, res, next) => {
 
     if (isCategoryNotCompareToTransaction) {
       return next(
-        new BadRequest(`This transaction type have no ${category} category`)
+        new BadRequest(`This transaction type have no ${category} category`),
       )
     }
 
