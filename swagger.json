@@ -1,53 +1,181 @@
 {
-    "openapi": "3.0.1",
-    "info":{
-        "version": "1.0.0",
-        "title": "Swagger test Kapusta",
-"description": "Showing off swagger-ui-express",
-"license":{
-    "name": "MIT",
-    "url": "https://opensource.org/licenses/MIT"
-}
-
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Swagger test Kapusta",
+    "description": "Showing off swagger-ui-express",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:3001" }, { "url": "" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
     },
-    "consumes": ["application/json"],
-    "produces": ["application/json"],
-    "servers": [{"url": "http://localhost:3001"}, {"url": ""}],
-    "tags": [
-        {
-            "name": "Auth",
-            "description": "Authorization endpoints"
-        },
-        {
-            "name": "Transaction",
-            "description": "Add transaction endpoints"
-        }
-    ],
-    "paths": {
-        "/auth/signup":{
-            "post":{
-                "tags": ["Auth"],
-                "summary": "User registration",
-                "parameters": [],
-                "security": [{"Bearer": []}],
+    {
+      "name": "Transaction",
+      "description": "Add transaction endpoints"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
 
-                "requestBody": {
-                    "description": "Registration`s object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": ""
-                            }
-                        }
-                    }
-                },
-                "response": {
-                    "201": {
-                        "description": ""
-                    }
-                }
+        "requestBody": {
+          "description": "Registration`s object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
             }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          }
         }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "requestBody": {
+          "description": "Registration`s object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": ""
+              }
+            }
+          }
+        },
+        "response": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify/:verificationToken": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User verify",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "verificationToken",
+            "required": true,
+            "type": "string",
+            "description": "Verify token is required"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+
+        "requestBody": {
+          "description": "Registration`s object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": ""
+              }
+            }
+          }
+        },
+        "response": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User`s password",
+            "example": "qwerty12345"
+          },
+          "name": {
+            "type": "string",
+            "description": "User`s name",
+            "example": "Aleksandr"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User`s id",
+            "example": "61bef12e0d3d928cbb7e3a46"
+          },
+          "date": {
+            "type": "string",
+            "description": "User registration date",
+            "example": "19.12.2021_10:46:32 am"
+          },
+          "email": {
+            "type": "string",
+            "description": "User`s email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User`s name",
+            "example": "Aleksandr"
+          }
+        }
+      }
+    }
+  },
+  "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
 }
