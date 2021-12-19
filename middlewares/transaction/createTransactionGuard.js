@@ -1,6 +1,6 @@
-const { BadRequest } = require('http-errors');
-const { CATEGORY_INCOME, CATEGORY_EXPENSE } = require('../../model/constants');
-const { transactionsUtils } = require('../../utils/transactions');
+const { BadRequest } = require('http-errors')
+const { CATEGORY_INCOME, CATEGORY_EXPENSE } = require('../../model/constants')
+const { transactionsUtils } = require('../../utils/transactions')
 
 const createTransactionGuard = async (req, res, next) => {
   try {
@@ -11,9 +11,9 @@ const createTransactionGuard = async (req, res, next) => {
       hours: currHours,
       minutes: currMinutes,
       date: currDate,
-    } = transactionsUtils.getCurrDate();
+    } = transactionsUtils.getCurrDate()
 
-    const { balance = 0 } = req.user;
+    const { balance = 0 } = req.user
 
     const {
       amount,
@@ -22,40 +22,40 @@ const createTransactionGuard = async (req, res, next) => {
       month = currMonth - 1,
       year = currYear,
       day = currDay,
-    } = req.body;
-    const amountNum = Number(amount);
+    } = req.body
+    const amountNum = Number(amount)
     const requestedDate = new Date(
       Date.UTC(year, month - 1, day, currHours, currMinutes),
-    );
-    const timestamp = requestedDate.getTime();
+    )
+    const timestamp = requestedDate.getTime()
 
     if (requestedDate > currDate) {
-      return next(new BadRequest('Date is in future'));
+      return next(new BadRequest('Date is in future'))
     }
 
     if (requestedDate.getUTCDate() !== day) {
-      return next(new BadRequest('Impossible date'));
+      return next(new BadRequest('Impossible date'))
     }
 
     if (!isIncome && amountNum > balance) {
-      return next(new BadRequest('Amount is greater than balance'));
+      return next(new BadRequest('Amount is greater than balance'))
     }
 
     const isCategoryNotCompareToTransaction = isIncome
       ? !CATEGORY_INCOME.includes(category)
-      : !CATEGORY_EXPENSE.includes(category);
+      : !CATEGORY_EXPENSE.includes(category)
 
     if (isCategoryNotCompareToTransaction) {
       return next(
         new BadRequest(`This transaction type have no ${category} category`),
-      );
+      )
     }
 
-    req.body.timestamp = timestamp;
-    next();
+    req.body.timestamp = timestamp
+    next()
   } catch (error) {
-    next(error);
+    next(error)
   }
-};
+}
 
-module.exports = createTransactionGuard;
+module.exports = createTransactionGuard
