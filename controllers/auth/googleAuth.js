@@ -43,9 +43,8 @@ const googleRedirect = async (req, res, next) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     }
   })
-
   const { id: verificationToken, name, email, picture } = userData.data
-  const { Authorization: token } = userData.config.headers
+  const { access_token: token } = tokenData.data
   const user = await User.findOne({ email })
   if (!user) {
     const newUser = new User({ email, name, picture, token, verificationToken, isGoogle: true })
@@ -63,6 +62,7 @@ const googleRedirect = async (req, res, next) => {
     subject: 'Confirmation of registration',
     html: `${mailVerify(verificationToken, name)}`,
   }
+
   await sendMailVerify(sendMail)
 
   return res.redirect(`${process.env.FRONTEND_URL}?accessToken=${token}`)

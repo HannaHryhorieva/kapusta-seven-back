@@ -20,6 +20,6 @@ router.post('/logout', authenticate, controllerWrapper(authCtr.logout))
 
 router.patch('/balance', authenticate, controllerWrapper(authCtr.updBalance))
 
-router.get('/users/:userId', authenticate, controllerWrapper(authCtr.getUser))
+router.get('/users/:token', authenticate, controllerWrapper(authCtr.getUser))
 
 module.exports = router
