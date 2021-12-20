@@ -31,6 +31,10 @@ const userSchema = Schema({
     type: String,
     default: null,
   },
+  isGoogle: {
+    type: Boolean,
+    default: false
+  },
   avatarURL: String,
   verify: {
     type: Boolean,

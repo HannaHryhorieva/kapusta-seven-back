@@ -1,4 +1,4 @@
-const { BadRequest, Unauthorized } = require('http-errors')
+const { BadRequest, Unauthorized, Forbidden } = require('http-errors')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -10,7 +10,7 @@ const login = async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email })
   if (!user) {
-    throw new BadRequest()
+    throw new BadRequest(`User with this email: ${email}, was not found!`)
   }
   const compareResult = bcrypt.compareSync(password, user.password)
   if (!compareResult) {
@@ -18,6 +18,9 @@ const login = async (req, res) => {
   }
   if (!user.verify) {
     throw new BadRequest('Not Verified')
+  }
+  if (user.isGoogle) {
+    throw new Forbidden('Login failed. Please sign in with your Google account')
   }
   const payload = {
     id: user._id,

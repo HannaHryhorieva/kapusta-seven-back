@@ -6,6 +6,7 @@ const app = express()
 const transactionRouter = require('./routes/api/transaction')
 
 const authRouter = require('./routes/api/auth')
+const swaggerRouter = require('./routes/api/swaggerDoc')
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
@@ -15,6 +16,7 @@ app.use(express.json())
 
 app.use('/auth', authRouter)
 app.use('/api/transactions', transactionRouter)
+app.use('/api/swagger', swaggerRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
