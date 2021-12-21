@@ -1,25 +1,30 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.0",
-    "title": "Swagger test Kapusta",
-    "description": "Showing off swagger-ui-express",
+    "version": "1.0.2",
+    "title": "kapusta-api",
+    "description": "Showing off kapusta-api",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3001" }, { "url": "" }],
+  "consumes": [
+    "application/json",
+    "text/plain",
+    "multipart/form-data",
+    "image/*"
+  ],
+  "produces": ["application/json", "text/plain", "application/xml"],
+  "servers": [{ "url": "http://localhost:3001" }],
   "tags": [
     {
       "name": "Auth",
       "description": "Authorization endpoints"
     },
     {
-      "name": "Transaction",
-      "description": "Add transaction endpoints"
+      "name": "Transactions",
+      "description": "Transactions endpoints"
     }
   ],
   "paths": {
@@ -28,15 +33,13 @@
         "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
-
         "requestBody": {
-          "description": "Registration`s object",
+          "description": "Register's object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/RegisterRequest"
               }
             }
           }
@@ -47,7 +50,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterError"
                 }
               }
             }
@@ -58,28 +71,56 @@
     "/auth/signin": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User login",
+        "summary": "User authentication",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
-
         "requestBody": {
-          "description": "Registration`s object",
+          "description": "Login's object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": ""
+                "$ref": "#/components/schemas/LoginRequest"
               }
             }
           }
         },
-        "response": {
-          "201": {
+        "responses": {
+          "200": {
             "description": "success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not Verified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginErrorVerifiedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Login failed. Please sign in with your Google account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginErrorFormResponse"
                 }
               }
             }
@@ -87,35 +128,422 @@
         }
       }
     },
-    "/auth/verify/:verificationToken": {
+    "/auth/users/{token}": {
       "get": {
         "tags": ["Auth"],
-        "summary": "User verify",
+        "summary": "User current. Check the token in the request header!",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "type": "string",
+            "description": "Users's verify token"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User with this email not found. Please register!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCurrentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "204": {
+            "description": "success",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/balance": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "User balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Balance's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User with this id not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/verify/{verificationToken}": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User email verify",
         "parameters": [
           {
             "in": "path",
             "name": "verificationToken",
             "required": true,
             "type": "string",
-            "description": "Verify token is required"
+            "description": "Users's verify token"
           }
         ],
-        "security": [{ "Bearer": [] }],
-
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserVerifyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseUserVerify"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/verify": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User email repeat verify",
+        "parameters": [],
         "requestBody": {
-          "description": "Registration`s object",
+          "description": "User email object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": ""
+                "$ref": "#/components/schemas/RepeatVerifyRequest"
               }
             }
           }
         },
-        "response": {
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRepeatVerifyResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Verification has already been passed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseUserRepeatVerify"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Google authentication. WARNING: Works only for sign-in, after registered on front-end (if you're writing your back-end for a SPECIFIC front-end, then you can configure it right to work both for sign-up & sign-in)",
+        "parameters": [],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "Successful operation (redirect to front-end with accessToken in query). Then use GET /auth/users/:token",
+            "content": {}
+          },
+          "400": {
+            "description": "Not Verified",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/refresh": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Refresh token. Change Bearer RefreshToken on header request!",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Add new transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Transaction's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
           "201": {
-            "description": ""
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions/{id}": {
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Delete one transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "The id of transaction",
+            "example": "615ca9a2e6502c38886cf887"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Transaction deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionBadReqResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions/byYear/{year}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions by year",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "year",
+            "required": true,
+            "type": "number",
+            "description": "The date of transactions",
+            "example": "2021"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Existed transactions",
+                      "example": "Existed transactions"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Information about the transaction by year",
+                      "properties": {
+                        "income": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/GetTransactionByYearIncomeResponse"
+                        },
+                        "expense": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/GetTransactionByYearExpenseResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions/byCategory/{year}/{month}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions by period",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "year",
+            "required": true,
+            "type": "number",
+            "description": "Period of transactions",
+            "example": "05.2020"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTransactionByYearMonthResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -123,59 +551,809 @@
   },
   "components": {
     "schemas": {
-      "RegistrationRequest": {
+      "RegisterRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "User name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty12345"
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "201"
+          },
+          "data": {
+            "type": "object",
+            "description": "User's credential",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's id",
+                "example": "61c0ce27b5e7677abbff23d4"
+              },
+              "date": {
+                "type": "string",
+                "description": "Registration date",
+                "example": "20.12.2021_09:21:07 pm"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "User name"
+              }
+            }
+          }
+        }
+      },
+      "RegisterError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "409"
+          },
+          "message": {
+            "type": "string",
+            "description": "Email in use"
+          }
+        }
+      },
+      "LoginRequest": {
         "type": "object",
         "required": ["email"],
         "properties": {
           "email": {
             "type": "string",
-            "description": "User`s email",
+            "description": "User's email",
             "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "User`s password",
+            "description": "User's password",
             "example": "qwerty12345"
-          },
-          "name": {
-            "type": "string",
-            "description": "User`s name",
-            "example": "Aleksandr"
           }
         }
       },
-      "RegistrationResponse": {
+      "LoginResponse": {
         "type": "object",
         "properties": {
-          "_id": {
+          "status": {
             "type": "string",
-            "description": "User`s id",
-            "example": "61bef12e0d3d928cbb7e3a46"
+            "description": "success"
           },
-          "date": {
+          "code": {
             "type": "string",
-            "description": "User registration date",
-            "example": "19.12.2021_10:46:32 am"
+            "description": "200"
           },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "User's token",
+                "example": "ya29.a0ARrdaM-Ck3TkneTdI4zCb1gB0-ubZZtvNeZnQXxxOb-IIEjCyt0308rjf9j97z2qHSf_rtM1VEck_e-aLDypGNWuihMTCr3P6MdbtlF6ia_dlqAubGYS0PitMzCU13_Aex_c41hrmmx79P5ME6jexs1JpcE8"
+              },
+              "refreshToken": {
+                "type": "string",
+                "description": "User's token"
+              },
+              "user": {
+                "type": "object",
+                "description": "User's credential",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "description": "User's id",
+                    "example": "61c0ce27b5e7677abbff23d4"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Registration date",
+                    "example": "20.12.2021_09:21:07 pm"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "User name"
+                  },
+                  "balance": {
+                    "type": "number",
+                    "description": "User`s money",
+                    "example": "4680.85"
+                  },
+                  "picture": {
+                    "type": "string",
+                    "description": "User's avatar",
+                    "example": "https://lh3.googleusercontent.com/a/AATXAJxze2jWGjx-26Q3ihzVhh6GYUXTtNVz7IIOwUfJ=s96-c"
+                  },
+                  "verify": {
+                    "type": "boolean",
+                    "description": "Confirmation of registration",
+                    "example": "false"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "LoginErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "401"
+          },
+          "message": {
+            "type": "string",
+            "description": "Password wrong"
+          }
+        }
+      },
+      "LoginErrorVerifiedResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Not Verified"
+          }
+        }
+      },
+      "LoginErrorFormResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "403"
+          },
+          "message": {
+            "type": "string",
+            "description": "Login failed. Please sign in with your Google account"
+          }
+        }
+      },
+      "CurrentResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          },
+          "data": {
+            "type": "object",
+            "description": "User's credential",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's id",
+                "example": "61c0ce27b5e7677abbff23d4"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "User name"
+              },
+              "balance": {
+                "type": "number",
+                "description": "User`s money",
+                "example": 4680.85
+              },
+              "token": {
+                "type": "string",
+                "description": "User's token",
+                "example": "ya29.a0ARrdaM-Ck3TkneTdI4zCb1gB0-ubZZtvNeZnQXxxOb-IIEjCyt0308rjf9j97z2qHSf_rtM1VEck_e-aLDypGNWuihMTCr3P6MdbtlF6ia_dlqAubGYS0PitMzCU13_Aex_c41hrmmx79P5ME6jexs1JpcE8"
+              },
+              "date": {
+                "type": "string",
+                "description": "Registration date",
+                "example": "20.12.2021_09:21:07 pm"
+              },
+              "picture": {
+                "type": "string",
+                "description": "User's avatar",
+                "example": "https://lh3.googleusercontent.com/a/AATXAJxze2jWGjx-26Q3ihzVhh6GYUXTtNVz7IIOwUfJ=s96-c"
+              },
+              "verify": {
+                "type": "boolean",
+                "description": "Confirmation of registration",
+                "example": "false"
+              }
+            }
+          }
+        }
+      },
+      "ErrorCurrentResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "Error code",
+            "example": "404"
+          },
+          "message": {
+            "type": "string",
+            "description": "User not found.",
+            "example": "User with this email not found. Please register!"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "Error code",
+            "example": "500"
+          },
+          "message": {
+            "type": "string",
+            "description": "Massage error server",
+            "example": "Server error"
+          }
+        }
+      },
+      "BalanceRequest": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "number",
+            "description": "User's balance",
+            "example": 0
+          }
+        }
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "balance": {
+                "type": "number",
+                "description": "User's balance",
+                "example": 50000
+              }
+            }
+          }
+        }
+      },
+      "NotFoundErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "404",
+            "example": "404"
+          },
+          "message": {
+            "type": "string",
+            "description": "Not found",
+            "example": "Not found"
+          }
+        }
+      },
+      "UserVerifyResponse": {
+        "type": "string",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          }
+        }
+      },
+      "ErrorResponseUserVerify": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "404",
+            "example": "404"
+          },
+          "message": {
+            "type": "string",
+            "description": "Verification token not found",
+            "example": "Verification token not found"
+          }
+        }
+      },
+      "RepeatVerifyRequest": {
+        "type": "object",
+        "properties": {
           "email": {
             "type": "string",
-            "description": "User`s email",
+            "description": "User's email",
             "format": "email"
-          },
-          "name": {
+          }
+        }
+      },
+      "UserRepeatVerifyResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
             "type": "string",
-            "description": "User`s name",
-            "example": "Aleksandr"
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "Verification email sent",
+                "example": "Verification email sent"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponseUserRepeatVerify": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "409",
+            "example": "409"
+          },
+          "message": {
+            "type": "string",
+            "description": "Verification has already been passed",
+            "example": "Verification has already been passed"
+          }
+        }
+      },
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          },
+          "data": {
+            "type": "object",
+            "description": "User's credential",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "User's token"
+              },
+              "refreshToken": {
+                "type": "string",
+                "description": "User's token"
+              },
+              "user": {
+                "type": "object",
+                "description": "User's credential",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User's name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email"
+                  },
+                  "avatarURL": {
+                    "type": "string",
+                    "description": "User's avatar"
+                  },
+                  "balance": {
+                    "type": "number",
+                    "description": "User's balance"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateTransactionRequest": {
+        "type": "object",
+        "required": ["category", "amount", "description"],
+        "properties": {
+          "day": {
+            "type": "number",
+            "description": "Day of transaction",
+            "example": 17
+          },
+          "month": {
+            "type": "number",
+            "description": "Month of transaction",
+            "example": 12
+          },
+          "year": {
+            "type": "number",
+            "description": "Year of transaction",
+            "example": 2021
+          },
+          "description": {
+            "type": "string",
+            "description": "The product's name",
+            "example": "Вода"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of transaction",
+            "example": "7"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Quantity of purchased product",
+            "example": "500"
+          },
+          "isIncome": {
+            "type": "boolean",
+            "description": "My income",
+            "example": false
+          }
+        }
+      },
+      "CreateTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Transaction created",
+            "example": "Transaction created"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "day": {
+                "type": "number",
+                "description": "Day of transaction",
+                "example": 17
+              },
+              "month": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 12
+              },
+              "year": {
+                "type": "number",
+                "description": "Year of transaction",
+                "example": 2021
+              },
+              "description": {
+                "type": "string",
+                "description": "The product's name",
+                "example": "Вода"
+              },
+              "category": {
+                "type": "string",
+                "description": "Category of transaction",
+                "example": "7"
+              },
+              "amount": {
+                "type": "number",
+                "description": "Quantity of purchased product",
+                "example": "500"
+              },
+              "isIncome": {
+                "type": "boolean",
+                "description": "My income",
+                "example": false
+              }
+            }
+          }
+        }
+      },
+      "CreateTransactionError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "400",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Missing required field",
+            "example": "Missing required field"
+          }
+        }
+      },
+      "DeleteTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Transaction deleted",
+            "example": "Transaction deleted"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Id of transaction",
+                "example": "61c10143280f8fc981a96ba8"
+              },
+              "month": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 12
+              },
+              "day": {
+                "type": "number",
+                "description": "Day of transaction",
+                "example": 17
+              },
+              "year": {
+                "type": "number",
+                "description": "Year of transaction",
+                "example": 2021
+              },
+              "description": {
+                "type": "string",
+                "description": "The product's name",
+                "example": "Вода"
+              },
+              "category": {
+                "type": "string",
+                "description": "Category of transaction",
+                "example": "7"
+              },
+              "amount": {
+                "type": "number",
+                "description": "Quantity of purchased product",
+                "example": "500"
+              },
+              "isIncome": {
+                "type": "boolean",
+                "description": "My income",
+                "example": false
+              },
+              "owner": {
+                "type": "objectId",
+                "description": "User`s id",
+                "example": "61bc6dadf3f6f6eebf4df831"
+              },
+              "timestamp": {
+                "type": "number",
+                "description": "",
+                "example": 1639779480000
+              }
+            }
+          }
+        }
+      },
+      "DeleteTransactionBadReqResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "400",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Deleting of this transaction make your balance negative",
+            "example": "Deleting of this transaction make your balance negative"
+          }
+        }
+      },
+      "DeleteTransactionErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "404",
+            "example": "404"
+          },
+          "message": {
+            "type": "string",
+            "description": "Transaction not found!",
+            "example": "Transaction not found!"
+          }
+        }
+      },
+      "GetTransactionByYearIncomeResponse": {
+        "type": "object",
+        "properties": {
+          "12": {
+            "type": "object",
+            "description": "Item month",
+            "properties": {
+              "data": {
+                "type": "array",
+                "description": "Detailed information about income.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Id of transaction",
+                      "example": "61c10143280f8fc981a96ba8"
+                    },
+                    "month": {
+                      "type": "number",
+                      "description": "Month of transaction",
+                      "example": 12
+                    },
+                    "day": {
+                      "type": "number",
+                      "description": "Day of transaction",
+                      "example": 17
+                    },
+                    "year": {
+                      "type": "number",
+                      "description": "Year of transaction",
+                      "example": 2021
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "The product's name",
+                      "example": "Вода"
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Category of transaction",
+                      "example": "7"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "description": "Quantity of purchased product",
+                      "example": "500"
+                    },
+                    "isIncome": {
+                      "type": "boolean",
+                      "description": "My income",
+                      "example": false
+                    },
+                    "owner": {
+                      "type": "objectId",
+                      "description": "User`s id",
+                      "example": "61bc6dadf3f6f6eebf4df831"
+                    },
+                    "timestamp": {
+                      "type": "number",
+                      "description": "",
+                      "example": 1639779480000
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetTransactionByYearMonthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Ok",
+            "example": "Ok"
           }
         }
       }
-    }
-  },
-  "securitySchemes": {
+    },
+    "securitySchemes": {
       "Bearer": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
       }
     }
+  }
 }

@@ -1,19 +1,19 @@
-const { User } = require('../../model')
-const { NotFound } = require('http-errors')
+const { User } = require("../../model");
+const { NotFound } = require("http-errors");
 
-const getUser = async(req, res) => {
-  const { token } = req.params
-  const user = await User.find()
-  const userFind = user.find(user => {
-    return user.token === token ? user : null
-  })
+const getUser = async (req, res) => {
+  const { token } = req.params;
+  const user = await User.find();
+  const userFind = user.find((user) => {
+    return user.token === token ? user : null;
+  });
   if (!userFind) {
-    throw new NotFound('User with this email not found. Please register!')
+    throw new NotFound("User with this email not found. Please register!");
   }
-  const { _id, email, name, date, picture, verify, balance } = userFind
+  const { _id, email, name, date, picture, verify, balance } = userFind;
   res.json({
-    status: 'success',
-    code: 201,
+    status: "success",
+    code: 200,
     data: {
       _id,
       email,
@@ -22,9 +22,9 @@ const getUser = async(req, res) => {
       token: userFind.token,
       date,
       picture,
-      verify
-    }
-  })
-}
+      verify,
+    },
+  });
+};
 
-module.exports = getUser
+module.exports = getUser;
