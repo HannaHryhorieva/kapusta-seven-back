@@ -469,6 +469,36 @@
         }
       }
     },
+    "/api/transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get all transactions",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Transaction deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllTransactionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/transactions/byYear/{year}": {
       "get": {
         "tags": ["Transactions"],
@@ -522,7 +552,7 @@
     "/api/transactions/byCategory/{year}/{month}": {
       "get": {
         "tags": ["Transactions"],
-        "summary": "Get transactions by period",
+        "summary": "Get transactions by category and month",
         "parameters": [
           {
             "in": "path",
@@ -530,7 +560,15 @@
             "required": true,
             "type": "number",
             "description": "Period of transactions",
-            "example": "05.2020"
+            "example": "2021"
+          },
+          {
+            "in": "path",
+            "name": "month",
+            "required": true,
+            "type": "number",
+            "description": "Period of transactions",
+            "example": "5"
           }
         ],
         "security": [{ "Bearer": [] }],
@@ -540,7 +578,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetTransactionByYearMonthResponse"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Existed transactions with categories",
+                      "example": "Existed transactions with categories"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Information about the transaction by category and month",
+                      "properties": {
+                        "income": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/GetTransactionByCategoryIncomeResponse"
+                        },
+                        "expense": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/GetTransactionByCategoryExpenseResponse"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -1227,6 +1286,97 @@
           }
         }
       },
+      "GetAllTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Existed transactions",
+            "example": "Existed transactions"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "_id": {
+                "type": "string",
+                "description": "Id of transaction",
+                "example": "61c10143280f8fc981a96ba8"
+              },
+              "month": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 12
+              },
+              "day": {
+                "type": "number",
+                "description": "Day of transaction",
+                "example": 17
+              },
+              "year": {
+                "type": "number",
+                "description": "Year of transaction",
+                "example": 2021
+              },
+              "description": {
+                "type": "string",
+                "description": "The product's name",
+                "example": "Маркет"
+              },
+              "category": {
+                "type": "string",
+                "description": "Category of transaction",
+                "example": "1"
+              },
+              "amount": {
+                "type": "number",
+                "description": "Quantity of purchased product",
+                "example": "769"
+              },
+              "isIncome": {
+                "type": "boolean",
+                "description": "My income",
+                "example": false
+              },
+              "owner": {
+                "type": "objectId",
+                "description": "User`s id",
+                "example": "61bc6dadf3f6f6eebf4df831"
+              },
+              "timestamp": {
+                "type": "number",
+                "description": "",
+                "example": 1639764600000
+              }
+            },
+            "example": [
+              {
+                "_id": "61c0c719280f8fc981a9695e",
+                "month": 12,
+                "day": 17,
+                "year": 2021,
+                "description": "Маркет",
+                "category": 1,
+                "amount": 769,
+                "isIncome": false,
+                "owner": "61bc6dadf3f6f6eebf4df831",
+                "timestamp": 1639764600000
+              },
+              {
+                "_id": "61c0dc9b280f8fc981a969e2",
+                "month": 12,
+                "day": 17,
+                "year": 2021,
+                "description": "Сахар",
+                "category": 1,
+                "amount": 400,
+                "isIncome": false,
+                "owner": "61bc6dadf3f6f6eebf4df831",
+                "timestamp": 1639770120000
+              }
+            ]
+          }
+        }
+      },
       "DeleteTransactionBadReqResponse": {
         "type": "object",
         "properties": {
@@ -1332,18 +1482,450 @@
                     }
                   }
                 }
+              },
+              "total": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 3900
               }
             }
           }
         }
       },
-      "GetTransactionByYearMonthResponse": {
+      "GetTransactionByYearExpenseResponse": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "string",
-            "description": "Ok",
-            "example": "Ok"
+          "9": {
+            "type": "object",
+            "description": "Item month",
+            "properties": {
+              "data": {
+                "type": "array",
+                "description": "Detailed information about income.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Id of transaction",
+                      "example": "61c10143280f8fc981a96ba8"
+                    },
+                    "month": {
+                      "type": "number",
+                      "description": "Month of transaction",
+                      "example": 12
+                    },
+                    "day": {
+                      "type": "number",
+                      "description": "Day of transaction",
+                      "example": 17
+                    },
+                    "year": {
+                      "type": "number",
+                      "description": "Year of transaction",
+                      "example": 2021
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "The product's name",
+                      "example": "Курсы повышения квал."
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Category of transaction",
+                      "example": "9"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "description": "Quantity of purchased product",
+                      "example": "2500"
+                    },
+                    "isIncome": {
+                      "type": "boolean",
+                      "description": "My income",
+                      "example": false
+                    },
+                    "owner": {
+                      "type": "objectId",
+                      "description": "User`s id",
+                      "example": "61bc6dadf3f6f6eebf4df831"
+                    },
+                    "timestamp": {
+                      "type": "number",
+                      "description": "",
+                      "example": 1639770240000
+                    }
+                  }
+                }
+              },
+              "total": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 2500
+              }
+            }
+          }
+        }
+      },
+      "GetTransactionByCategoryIncomeResponse": {
+        "type": "object",
+        "properties": {
+          "0": {
+            "type": "object",
+            "description": "Item month",
+            "properties": {
+              "data": {
+                "type": "array",
+                "description": "Detailed information about income.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Id of transaction",
+                      "example": "61c10143280f8fc981a96ba8"
+                    },
+                    "month": {
+                      "type": "number",
+                      "description": "Month of transaction",
+                      "example": 12
+                    },
+                    "day": {
+                      "type": "number",
+                      "description": "Day of transaction",
+                      "example": 17
+                    },
+                    "year": {
+                      "type": "number",
+                      "description": "Year of transaction",
+                      "example": 2021
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "The product's name",
+                      "example": "ЗП"
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Category of transaction",
+                      "example": "0"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "description": "Quantity of purchased product",
+                      "example": "2000"
+                    },
+                    "isIncome": {
+                      "type": "boolean",
+                      "description": "My income",
+                      "example": true
+                    },
+                    "owner": {
+                      "type": "objectId",
+                      "description": "User`s id",
+                      "example": "61bc6dadf3f6f6eebf4df831"
+                    },
+                    "timestamp": {
+                      "type": "number",
+                      "description": "",
+                      "example": 1639771080000
+                    }
+                  }
+                }
+              },
+              "total": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 20000
+              }
+            }
+          }
+        }
+      },
+      "GetTransactionByCategoryExpenseResponse": {
+        "type": "object",
+        "properties": {
+          "1": {
+            "type": "object",
+            "description": "Item month",
+            "properties": {
+              "data": {
+                "type": "array",
+                "description": "Detailed information about expense.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Id of transaction",
+                      "example": "61c10143280f8fc981a96ba8"
+                    },
+                    "month": {
+                      "type": "number",
+                      "description": "Month of transaction",
+                      "example": 12
+                    },
+                    "day": {
+                      "type": "number",
+                      "description": "Day of transaction",
+                      "example": 17
+                    },
+                    "year": {
+                      "type": "number",
+                      "description": "Year of transaction",
+                      "example": 2021
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "The product's name",
+                      "example": "Маркет"
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Category of transaction",
+                      "example": "1"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "description": "Quantity of purchased product",
+                      "example": "400"
+                    },
+                    "isIncome": {
+                      "type": "boolean",
+                      "description": "My income",
+                      "example": false
+                    },
+                    "owner": {
+                      "type": "objectId",
+                      "description": "User`s id",
+                      "example": "61bc6dadf3f6f6eebf4df831"
+                    },
+                    "timestamp": {
+                      "type": "number",
+                      "description": "",
+                      "example": 1639770120000
+                    }
+                  }
+                }
+              },
+              "total": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 400
+              }
+            }
+          }
+        },
+        "example": {
+          "message": "Existed transactions with categories",
+          "data": {
+            "income": {
+              "0": {
+                "data": [
+                  {
+                    "_id": "61c0e07a280f8fc981a96a1a",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "ЗП",
+                    "category": 0,
+                    "amount": 20000,
+                    "isIncome": true,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639771080000
+                  },
+                  {
+                    "_id": "61c0e088280f8fc981a96a1e",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Премия",
+                    "category": 0,
+                    "amount": 2000,
+                    "isIncome": true,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639771140000
+                  }
+                ],
+                "total": 22000
+              },
+              "1": {
+                "data": [
+                  {
+                    "_id": "61c0e0af280f8fc981a96a22",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Подарок",
+                    "category": 1,
+                    "amount": 1000,
+                    "isIncome": true,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639771140000
+                  }
+                ],
+                "total": 1000
+              }
+            },
+            "expense": {
+              "1": {
+                "data": [
+                  {
+                    "_id": "61c0c719280f8fc981a9695e",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Маркет",
+                    "category": 1,
+                    "amount": 769,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639764600000
+                  },
+                  {
+                    "_id": "61c0dc9b280f8fc981a969e2",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Сахар",
+                    "category": 1,
+                    "amount": 400,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639770120000
+                  },
+                  {
+                    "_id": "61c0dcb4280f8fc981a969e6",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Печенье",
+                    "category": 1,
+                    "amount": 80,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639770120000
+                  },
+                  {
+                    "_id": "61c0dcc4280f8fc981a969ea",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "АТБ",
+                    "category": 1,
+                    "amount": 750,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639770180000
+                  }
+                ],
+                "total": 1999
+              },
+              "6": {
+                "data": [
+                  {
+                    "_id": "61c0dd08280f8fc981a969f2",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Смартфон",
+                    "category": 6,
+                    "amount": 12500,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639770240000
+                  }
+                ],
+                "total": 12500
+              },
+              "7": {
+                "data": [
+                  {
+                    "_id": "61c0e0ec280f8fc981a96a26",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Платеж за газ",
+                    "category": 7,
+                    "amount": 1500,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639771200000
+                  },
+                  {
+                    "_id": "61c0e0f9280f8fc981a96a2a",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Платеж за свет",
+                    "category": 7,
+                    "amount": 500,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639771200000
+                  },
+                  {
+                    "_id": "61c0e10b280f8fc981a96a2e",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Квартплата",
+                    "category": 7,
+                    "amount": 400,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639771260000
+                  },
+                  {
+                    "_id": "61c0e13f280f8fc981a96a32",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Вода",
+                    "category": 7,
+                    "amount": 800,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639771320000
+                  }
+                ],
+                "total": 3200
+              },
+              "9": {
+                "data": [
+                  {
+                    "_id": "61c0dd35280f8fc981a969f6",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Курсы повышения квал.",
+                    "category": 9,
+                    "amount": 2500,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639770240000
+                  }
+                ],
+                "total": 2500
+              },
+              "10": {
+                "data": [
+                  {
+                    "_id": "61c0dd52280f8fc981a969fa",
+                    "month": 12,
+                    "day": 17,
+                    "year": 2021,
+                    "description": "Подарок",
+                    "category": 10,
+                    "amount": 1000,
+                    "isIncome": false,
+                    "owner": "61bc6dadf3f6f6eebf4df831",
+                    "timestamp": 1639770300000
+                  }
+                ],
+                "total": 1000
+              }
+            }
           }
         }
       }

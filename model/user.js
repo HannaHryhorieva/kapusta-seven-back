@@ -18,7 +18,7 @@ const userSchema = Schema({
   },
   picture: {
     type: String,
-    required: false,
+    required: false
   },
   balance: {
     type: Number.parseFloat(0E-2),
