@@ -1,10 +1,9 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-require('dotenv').config()
 const app = express()
-const transactionRouter = require('./routes/api/transaction')
 
+const transactionRouter = require('./routes/api/transaction')
 const authRouter = require('./routes/api/auth')
 const swaggerRouter = require('./routes/api/swaggerDoc')
 
