@@ -13,7 +13,15 @@ const verify = async (req, res) => {
     verify: true,
   })
 
-  return res.status(200).redirect(`${process.env.FRONTEND_URL}`)
+  if (user.verificationToken) {
+    return res.json({
+      status: 'success',
+      code: 200,
+      message: 'Verify success!'
+    })
+  }
+
+  return res.redirect(`${process.env.FRONTEND_URL}`)
 }
 
 module.exports = verify

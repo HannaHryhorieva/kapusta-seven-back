@@ -271,56 +271,6 @@
         }
       }
     },
-    "/users/verify": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "User email repeat verify",
-        "parameters": [],
-        "requestBody": {
-          "description": "User email object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RepeatVerifyRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserRepeatVerifyResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Verification has already been passed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseUserRepeatVerify"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFoundErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/google": {
       "get": {
         "tags": ["Auth"],
@@ -335,36 +285,6 @@
           "400": {
             "description": "Not Verified",
             "content": {}
-          }
-        }
-      }
-    },
-    "/users/refresh": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "Refresh token. Change Bearer RefreshToken on header request!",
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-        "responses": {
-          "200": {
-            "description": "success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RefreshResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Fail",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         }
       }
@@ -469,7 +389,7 @@
         }
       }
     },
-    "/api/transactions": {
+    "/api/transactions/allTrans": {
       "get": {
         "tags": ["Transactions"],
         "summary": "Get all transactions",
@@ -549,6 +469,53 @@
         }
       }
     },
+    "/api/transactions/byMonth/{year}/{month}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions by month",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "year",
+            "required": true,
+            "type": "number",
+            "description": "The date of transactions",
+            "example": "2021"
+          },
+          {
+            "in": "path",
+            "name": "month",
+            "required": true,
+            "type": "number",
+            "description": "The date of transactions",
+            "example": "7"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTransactionByMonthResponse"
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Not found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotFoundErrorResponse"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/transactions/byCategory/{year}/{month}": {
       "get": {
         "tags": ["Transactions"],
@@ -601,6 +568,16 @@
                     }
                   }
                 }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Not found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotFoundErrorResponse"
               }
             }
           }
@@ -1416,6 +1393,101 @@
             "example": "Transaction not found!"
           }
         }
+      },
+      "GetTransactionByMonthResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Existed transactions",
+            "example": "Existed transactions"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "_id": {
+                "type": "string",
+                "description": "Id of transaction",
+                "example": "61c10143280f8fc981a96ba8"
+              },
+              "month": {
+                "type": "number",
+                "description": "Month of transaction",
+                "example": 12
+              },
+              "day": {
+                "type": "number",
+                "description": "Day of transaction",
+                "example": 17
+              },
+              "year": {
+                "type": "number",
+                "description": "Year of transaction",
+                "example": 2021
+              },
+              "description": {
+                "type": "string",
+                "description": "The product's name",
+                "example": "Вода"
+              },
+              "category": {
+                "type": "string",
+                "description": "Category of transaction",
+                "example": "7"
+              },
+              "amount": {
+                "type": "number",
+                "description": "Quantity of purchased product",
+                "example": "800"
+              },
+              "isIncome": {
+                "type": "boolean",
+                "description": "My income",
+                "example": false
+              },
+              "owner": {
+                "type": "objectId",
+                "description": "User`s id",
+                "example": "61bc6dadf3f6f6eebf4df831"
+              },
+              "timestamp": {
+                "type": "number",
+                "description": "",
+                "example": 1639771320000
+              }
+            }
+          }
+        },
+        "example": {
+          "message": "Existed transactions",
+          "data": [
+            {
+              "_id": "61c0e13f280f8fc981a96a32",
+              "month": 12,
+              "day": 17,
+              "year": 2021,
+              "description": "Вода",
+              "category": 7,
+              "amount": 800,
+              "isIncome": false,
+              "owner": "61bc6dadf3f6f6eebf4df831",
+              "timestamp": 1639771320000
+            },
+            {
+              "_id": "61c0e10b280f8fc981a96a2e",
+              "month": 12,
+              "day": 17,
+              "year": 2021,
+              "description": "Квартплата",
+              "category": 7,
+              "amount": 400,
+              "isIncome": false,
+              "owner": "61bc6dadf3f6f6eebf4df831",
+              "timestamp": 1639771260000
+            }
+          ]
+        }
+        
       },
       "GetTransactionByYearIncomeResponse": {
         "type": "object",
