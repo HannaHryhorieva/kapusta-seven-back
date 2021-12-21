@@ -2,6 +2,7 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const app = express()
+require('dotenv').config()
 
 const transactionRouter = require('./routes/api/transaction')
 const authRouter = require('./routes/api/auth')
