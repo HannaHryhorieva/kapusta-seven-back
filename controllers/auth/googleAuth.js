@@ -47,7 +47,7 @@ const googleRedirect = async (req, res, next) => {
   const { access_token: token } = tokenData.data
   const user = await User.findOne({ email })
   if (!user) {
-    const newUser = new User({ email, name, picture, token, verificationToken, isGoogle: true })
+    const newUser = new User({ email, name, picture, token, verificationToken, isGoogle: true, verify: true })
     await newUser.save()
   }
   if (user && !user.verify) {
@@ -57,13 +57,16 @@ const googleRedirect = async (req, res, next) => {
     await User.findByIdAndUpdate(user._id, { token })
   }
 
-  const sendMail = {
-    to: email,
-    subject: 'Confirmation of registration',
-    html: `${mailVerify(verificationToken, name)}`,
-  }
+  // const sendMail = {
+  //   to: email,
+  //   subject: 'Confirmation of registration',
+  //   html: `${mailVerify(verificationToken, name)}`,
+  // }
 
-  await sendMailVerify(sendMail)
+  // if (!user || !user.verify) {
+  //   await sendMailVerify(sendMail)
+  // }
+  // // await sendMailVerify(sendMail)
 
   return res.redirect(`${process.env.FRONTEND_URL}?accessToken=${token}`)
 }
