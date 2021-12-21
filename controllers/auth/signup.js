@@ -17,23 +17,24 @@ const registrationUser = async (req, res) => {
   const newUser = new User({ email, verificationToken, name, date })
   newUser.setPassword(password)
   await newUser.save()
+  const { _id, date: dateReg, email: mail, name: nameUs, verificationToken: verToken } = newUser
 
   const sendMail = {
     to: email,
     subject: 'Confirmation of registration',
     html: `${mailVerify(verificationToken, name)}`,
-
   }
   await sendMailVerify(sendMail)
 
   res.json({
-    status: 'Success',
+    status: 'success',
     code: 201,
     data: {
-      _id: newUser._id,
-      date: newUser.date,
-      email: newUser.email,
-      name: newUser.name,
+      _id,
+      date: dateReg,
+      email: mail,
+      name: nameUs,
+      verificationToken: verToken
     },
   })
 }

@@ -20,7 +20,9 @@ const login = async (req, res) => {
     throw new BadRequest('Not Verified')
   }
   if (user.isGoogle) {
-    throw new Forbidden('Login failed. Please sign in with your Google account')
+    throw new Forbidden(
+      'Login failed. Please sign in with your Google account'
+    )
   }
   const payload = {
     id: user._id,
@@ -40,7 +42,7 @@ const login = async (req, res) => {
         name,
         balance,
         picture,
-        verify
+        verify,
       },
     },
   })

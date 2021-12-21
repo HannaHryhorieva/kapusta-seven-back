@@ -13,7 +13,7 @@ const verify = async (req, res) => {
     verify: true,
   })
 
-  return res.status(200).redirect(`${process.env.FRONTEND_URL}`)
+  return res.redirect(301, `${process.env.FRONTEND_URL}`)
 }
 
 module.exports = verify

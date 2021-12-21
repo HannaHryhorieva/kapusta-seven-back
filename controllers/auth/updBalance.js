@@ -12,8 +12,8 @@ const updateBalance = async (req, res) => {
     status: 'success',
     code: 200,
     data: {
-      balance: user.balance
-    }
+      balance: user.balance,
+    },
   })
 }
 

@@ -1,10 +1,10 @@
 const { User } = require('../../model')
 const { NotFound } = require('http-errors')
 
-const getUser = async(req, res) => {
+const getUser = async (req, res) => {
   const { token } = req.params
   const user = await User.find()
-  const userFind = user.find(user => {
+  const userFind = user.find((user) => {
     return user.token === token ? user : null
   })
   if (!userFind) {
@@ -13,7 +13,7 @@ const getUser = async(req, res) => {
   const { _id, email, name, date, picture, verify, balance } = userFind
   res.json({
     status: 'success',
-    code: 201,
+    code: 200,
     data: {
       _id,
       email,
@@ -22,8 +22,8 @@ const getUser = async(req, res) => {
       token: userFind.token,
       date,
       picture,
-      verify
-    }
+      verify,
+    },
   })
 }
 
