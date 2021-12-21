@@ -18,7 +18,6 @@ const authenticate = async (req, res, next) => {
     if (userFind.token !== token) {
       throw new Unauthorized('Invalid token')
     }
-
     try {
       if (!userFind.isGoogle) {
         const { id } = jwt.verify(token, SECRET_KEY)
@@ -33,7 +32,6 @@ const authenticate = async (req, res, next) => {
       } else {
         req.user = userFind
       }
-
       next()
     } catch (error) {
       throw new Unauthorized('Invalid token')

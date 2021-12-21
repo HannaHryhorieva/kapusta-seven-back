@@ -2,8 +2,6 @@ const axios = require('axios')
 const queryString = require('query-string')
 const { BadRequest } = require('http-errors')
 const { User } = require('../../model')
-const mailVerify = require('../../public/mailVerify')
-const sendMailVerify = require('../../helpers')
 
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
@@ -56,17 +54,6 @@ const googleRedirect = async (req, res, next) => {
   if (user && user.token === null) {
     await User.findByIdAndUpdate(user._id, { token })
   }
-
-  // const sendMail = {
-  //   to: email,
-  //   subject: 'Confirmation of registration',
-  //   html: `${mailVerify(verificationToken, name)}`,
-  // }
-
-  // if (!user || !user.verify) {
-  //   await sendMailVerify(sendMail)
-  // }
-  // // await sendMailVerify(sendMail)
 
   return res.redirect(`${process.env.FRONTEND_URL}?accessToken=${token}`)
 }
