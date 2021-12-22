@@ -32,7 +32,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
-        "parameters": [],
         "requestBody": {
           "description": "Register's object",
           "required": true,
@@ -46,11 +45,21 @@
         },
         "responses": {
           "201": {
-            "description": "success",
+            "description": "Registration successful",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
                 }
               }
             }
@@ -61,6 +70,43 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RegisterError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify/{verificationToken}": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User email verify",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "verificationToken",
+            "required": true,
+            "type": "string",
+            "description": "Users's verify token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registration confirmed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserVerifyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseUserVerify"
                 }
               }
             }
@@ -225,43 +271,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/verify/{verificationToken}": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "User email verify",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "verificationToken",
-            "required": true,
-            "type": "string",
-            "description": "Users's verify token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "success",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserVerifyResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseUserVerify"
                 }
               }
             }
@@ -557,7 +566,7 @@
     "schemas": {
       "RegisterRequest": {
         "type": "object",
-        "required": ["email"],
+        "required": ["email", "password"],
         "properties": {
           "name": {
             "type": "string",
@@ -581,11 +590,13 @@
         "properties": {
           "status": {
             "type": "string",
-            "description": "success"
+            "description": "success",
+            "example": "success"
           },
           "code": {
-            "type": "string",
-            "description": "201"
+            "type": "number",
+            "description": 201,
+            "example": 201
           },
           "data": {
             "type": "object",
@@ -610,8 +621,33 @@
                 "type": "string",
                 "description": "User's name",
                 "example": "User name"
+              },
+              "verificationToken": {
+                "type": "string",
+                "description": "Confirmation of registration",
+                "example": "oD7n0k13h1vrrl-F_vMs-"
               }
             }
+          }
+        }
+      },
+      "BadRequestError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "number",
+            "description": "400",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "description": "Incorrectly entered email.",
+            "example": "Incorrectly entered email."
           }
         }
       },
@@ -623,8 +659,8 @@
             "description": "error"
           },
           "code": {
-            "type": "string",
-            "description": "409"
+            "type": "number",
+            "description": 409
           },
           "message": {
             "type": "string",
@@ -632,9 +668,22 @@
           }
         }
       },
+      "UserVerifyResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "number",
+            "description": 200
+          }
+        }
+      },
       "LoginRequest": {
         "type": "object",
-        "required": ["email"],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -656,8 +705,8 @@
             "description": "success"
           },
           "code": {
-            "type": "string",
-            "description": "200"
+            "type": "number",
+            "description": 200
           },
           "data": {
             "type": "object",
@@ -666,10 +715,6 @@
                 "type": "string",
                 "description": "User's token",
                 "example": "ya29.a0ARrdaM-Ck3TkneTdI4zCb1gB0-ubZZtvNeZnQXxxOb-IIEjCyt0308rjf9j97z2qHSf_rtM1VEck_e-aLDypGNWuihMTCr3P6MdbtlF6ia_dlqAubGYS0PitMzCU13_Aex_c41hrmmx79P5ME6jexs1JpcE8"
-              },
-              "refreshToken": {
-                "type": "string",
-                "description": "User's token"
               },
               "user": {
                 "type": "object",
@@ -698,7 +743,7 @@
                   "balance": {
                     "type": "number",
                     "description": "User`s money",
-                    "example": "4680.85"
+                    "example": 0
                   },
                   "picture": {
                     "type": "string",
@@ -708,7 +753,7 @@
                   "verify": {
                     "type": "boolean",
                     "description": "Confirmation of registration",
-                    "example": "false"
+                    "example": true
                   }
                 }
               }
@@ -724,8 +769,8 @@
             "description": "error"
           },
           "code": {
-            "type": "string",
-            "description": "401"
+            "type": "number",
+            "description": 401
           },
           "message": {
             "type": "string",
@@ -741,8 +786,8 @@
             "description": "error"
           },
           "code": {
-            "type": "string",
-            "description": "400"
+            "type": "number",
+            "description": 400
           },
           "message": {
             "type": "string",
@@ -758,8 +803,8 @@
             "description": "error"
           },
           "code": {
-            "type": "string",
-            "description": "403"
+            "type": "number",
+            "description": 403
           },
           "message": {
             "type": "string",
@@ -775,8 +820,8 @@
             "description": "success"
           },
           "code": {
-            "type": "string",
-            "description": "200"
+            "type": "number",
+            "description": 200
           },
           "data": {
             "type": "object",
@@ -800,7 +845,7 @@
               "balance": {
                 "type": "number",
                 "description": "User`s money",
-                "example": 4680.85
+                "example": 0
               },
               "token": {
                 "type": "string",
@@ -820,7 +865,7 @@
               "verify": {
                 "type": "boolean",
                 "description": "Confirmation of registration",
-                "example": "false"
+                "example": true
               }
             }
           }
@@ -835,9 +880,9 @@
             "example": "error"
           },
           "code": {
-            "type": "string",
-            "description": "Error code",
-            "example": "404"
+            "type": "number",
+            "description": "Error code 404",
+            "example": 404
           },
           "message": {
             "type": "string",
@@ -855,9 +900,9 @@
             "example": "error"
           },
           "code": {
-            "type": "string",
-            "description": "Error code",
-            "example": "500"
+            "type": "number",
+            "description": "Error code 500",
+            "example": 500
           },
           "message": {
             "type": "string",
@@ -872,7 +917,7 @@
           "balance": {
             "type": "number",
             "description": "User's balance",
-            "example": 0
+            "example": 17350
           }
         }
       },
@@ -881,11 +926,13 @@
         "properties": {
           "status": {
             "type": "string",
-            "description": "success"
+            "description": "success",
+            "example": "success"
           },
           "code": {
-            "type": "string",
-            "description": "200"
+            "type": "number",
+            "description": "200",
+            "example": 200
           },
           "data": {
             "type": "object",
@@ -893,7 +940,7 @@
               "balance": {
                 "type": "number",
                 "description": "User's balance",
-                "example": 50000
+                "example": 17350
               }
             }
           }
@@ -908,32 +955,14 @@
             "example": "error"
           },
           "code": {
-            "type": "string",
+            "type": "number",
             "description": "404",
-            "example": "404"
+            "example": 404
           },
           "message": {
             "type": "string",
             "description": "Not found",
             "example": "Not found"
-          }
-        }
-      },
-      "UserVerifyResponse": {
-        "type": "string",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "success"
-          },
-          "code": {
-            "type": "string",
-            "description": "200"
-          },
-          "message": {
-            "type": "string",
-            "description": "Verify success!",
-            "example": "Verify success!"
           }
         }
       },
@@ -946,117 +975,14 @@
             "example": "error"
           },
           "code": {
-            "type": "string",
+            "type": "number",
             "description": "404",
-            "example": "404"
+            "example": 404
           },
           "message": {
             "type": "string",
             "description": "Verification token not found",
             "example": "Verification token not found"
-          }
-        }
-      },
-      "RepeatVerifyRequest": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          }
-        }
-      },
-      "UserRepeatVerifyResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "success"
-          },
-          "code": {
-            "type": "string",
-            "description": "200"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string",
-                "description": "Verification email sent",
-                "example": "Verification email sent"
-              }
-            }
-          }
-        }
-      },
-      "ErrorResponseUserRepeatVerify": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "error",
-            "example": "error"
-          },
-          "code": {
-            "type": "string",
-            "description": "409",
-            "example": "409"
-          },
-          "message": {
-            "type": "string",
-            "description": "Verification has already been passed",
-            "example": "Verification has already been passed"
-          }
-        }
-      },
-      "RefreshResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "description": "success"
-          },
-          "code": {
-            "type": "string",
-            "description": "200"
-          },
-          "data": {
-            "type": "object",
-            "description": "User's credential",
-            "properties": {
-              "token": {
-                "type": "string",
-                "description": "User's token"
-              },
-              "refreshToken": {
-                "type": "string",
-                "description": "User's token"
-              },
-              "user": {
-                "type": "object",
-                "description": "User's credential",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "User's name"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "User's email",
-                    "format": "email"
-                  },
-                  "avatarURL": {
-                    "type": "string",
-                    "description": "User's avatar"
-                  },
-                  "balance": {
-                    "type": "number",
-                    "description": "User's balance"
-                  }
-                }
-              }
-            }
           }
         }
       },
@@ -1087,12 +1013,12 @@
           "category": {
             "type": "string",
             "description": "Category of transaction",
-            "example": "7"
+            "example": "Продукты"
           },
           "amount": {
             "type": "number",
             "description": "Quantity of purchased product",
-            "example": "500"
+            "example": 500
           },
           "isIncome": {
             "type": "boolean",
@@ -1135,12 +1061,12 @@
               "category": {
                 "type": "string",
                 "description": "Category of transaction",
-                "example": "7"
+                "example": "Продукты"
               },
               "amount": {
                 "type": "number",
                 "description": "Quantity of purchased product",
-                "example": "500"
+                "example": 500
               },
               "isIncome": {
                 "type": "boolean",
@@ -1160,9 +1086,9 @@
             "example": "error"
           },
           "code": {
-            "type": "string",
+            "type": "number",
             "description": "400",
-            "example": "400"
+            "example": 400
           },
           "message": {
             "type": "string",
@@ -1210,12 +1136,12 @@
               "category": {
                 "type": "string",
                 "description": "Category of transaction",
-                "example": "7"
+                "example": "Продукты"
               },
               "amount": {
                 "type": "number",
                 "description": "Quantity of purchased product",
-                "example": "500"
+                "example": "18"
               },
               "isIncome": {
                 "type": "boolean",
@@ -1223,7 +1149,7 @@
                 "example": false
               },
               "owner": {
-                "type": "objectId",
+                "type": "string",
                 "description": "User`s id",
                 "example": "61bc6dadf3f6f6eebf4df831"
               },
@@ -1245,9 +1171,9 @@
             "example": "error"
           },
           "code": {
-            "type": "string",
+            "type": "number",
             "description": "400",
-            "example": "400"
+            "example": 400
           },
           "message": {
             "type": "string",
@@ -1265,9 +1191,9 @@
             "example": "error"
           },
           "code": {
-            "type": "string",
+            "type": "number",
             "description": "404",
-            "example": "404"
+            "example": 404
           },
           "message": {
             "type": "string",
@@ -1315,12 +1241,12 @@
               "category": {
                 "type": "string",
                 "description": "Category of transaction",
-                "example": "7"
+                "example": "Продукты"
               },
               "amount": {
                 "type": "number",
                 "description": "Quantity of purchased product",
-                "example": "800"
+                "example": 55
               },
               "isIncome": {
                 "type": "boolean",
@@ -1328,7 +1254,7 @@
                 "example": false
               },
               "owner": {
-                "type": "objectId",
+                "type": "string",
                 "description": "User`s id",
                 "example": "61bc6dadf3f6f6eebf4df831"
               },
@@ -1349,8 +1275,8 @@
               "day": 17,
               "year": 2021,
               "description": "Вода",
-              "category": 7,
-              "amount": 800,
+              "category": "Продукты",
+              "amount": 55,
               "isIncome": false,
               "owner": "61bc6dadf3f6f6eebf4df831",
               "timestamp": 1639771320000
@@ -1361,7 +1287,7 @@
               "day": 17,
               "year": 2021,
               "description": "Квартплата",
-              "category": 7,
+              "category": "Комуналка, связь",
               "amount": 400,
               "isIncome": false,
               "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1374,7 +1300,7 @@
       "GetTransactionByYearIncomeResponse": {
         "type": "object",
         "properties": {
-          "12": {
+          "Продукты": {
             "type": "object",
             "description": "Item month",
             "properties": {
@@ -1412,12 +1338,12 @@
                     "category": {
                       "type": "string",
                       "description": "Category of transaction",
-                      "example": "7"
+                      "example": "Продукты"
                     },
                     "amount": {
                       "type": "number",
                       "description": "Quantity of purchased product",
-                      "example": "500"
+                      "example": 55
                     },
                     "isIncome": {
                       "type": "boolean",
@@ -1425,7 +1351,7 @@
                       "example": false
                     },
                     "owner": {
-                      "type": "objectId",
+                      "type": "string",
                       "description": "User`s id",
                       "example": "61bc6dadf3f6f6eebf4df831"
                     },
@@ -1449,9 +1375,9 @@
       "GetTransactionByYearExpenseResponse": {
         "type": "object",
         "properties": {
-          "9": {
+          "Образование": {
             "type": "object",
-            "description": "Item month",
+            "description": "Category by month",
             "properties": {
               "data": {
                 "type": "array",
@@ -1487,12 +1413,12 @@
                     "category": {
                       "type": "string",
                       "description": "Category of transaction",
-                      "example": "9"
+                      "example": "Образование"
                     },
                     "amount": {
                       "type": "number",
                       "description": "Quantity of purchased product",
-                      "example": "2500"
+                      "example": 2500
                     },
                     "isIncome": {
                       "type": "boolean",
@@ -1500,7 +1426,7 @@
                       "example": false
                     },
                     "owner": {
-                      "type": "objectId",
+                      "type": "string",
                       "description": "User`s id",
                       "example": "61bc6dadf3f6f6eebf4df831"
                     },
@@ -1524,7 +1450,7 @@
       "GetTransactionByCategoryIncomeResponse": {
         "type": "object",
         "properties": {
-          "0": {
+          "ЗП": {
             "type": "object",
             "description": "Item month",
             "properties": {
@@ -1562,12 +1488,12 @@
                     "category": {
                       "type": "string",
                       "description": "Category of transaction",
-                      "example": "0"
+                      "example": "ЗП"
                     },
                     "amount": {
                       "type": "number",
                       "description": "Quantity of purchased product",
-                      "example": "2000"
+                      "example": 2000
                     },
                     "isIncome": {
                       "type": "boolean",
@@ -1575,7 +1501,7 @@
                       "example": true
                     },
                     "owner": {
-                      "type": "objectId",
+                      "type": "string",
                       "description": "User`s id",
                       "example": "61bc6dadf3f6f6eebf4df831"
                     },
@@ -1599,7 +1525,7 @@
       "GetTransactionByCategoryExpenseResponse": {
         "type": "object",
         "properties": {
-          "1": {
+          "Продукты": {
             "type": "object",
             "description": "Item month",
             "properties": {
@@ -1632,17 +1558,17 @@
                     "description": {
                       "type": "string",
                       "description": "The product's name",
-                      "example": "Маркет"
+                      "example": "Вода"
                     },
                     "category": {
                       "type": "string",
                       "description": "Category of transaction",
-                      "example": "1"
+                      "example": "Продукты"
                     },
                     "amount": {
                       "type": "number",
                       "description": "Quantity of purchased product",
-                      "example": "400"
+                      "example": 400
                     },
                     "isIncome": {
                       "type": "boolean",
@@ -1650,7 +1576,7 @@
                       "example": false
                     },
                     "owner": {
-                      "type": "objectId",
+                      "type": "string",
                       "description": "User`s id",
                       "example": "61bc6dadf3f6f6eebf4df831"
                     },
@@ -1674,7 +1600,7 @@
           "message": "Existed transactions with categories",
           "data": {
             "income": {
-              "0": {
+              "ЗП": {
                 "data": [
                   {
                     "_id": "61c0e07a280f8fc981a96a1a",
@@ -1682,7 +1608,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "ЗП",
-                    "category": 0,
+                    "category": "ЗП",
                     "amount": 20000,
                     "isIncome": true,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1694,7 +1620,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Премия",
-                    "category": 0,
+                    "category": "ЗП",
                     "amount": 2000,
                     "isIncome": true,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1703,7 +1629,7 @@
                 ],
                 "total": 22000
               },
-              "1": {
+              "Доп. доход": {
                 "data": [
                   {
                     "_id": "61c0e0af280f8fc981a96a22",
@@ -1711,7 +1637,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Подарок",
-                    "category": 1,
+                    "category": "Доп. доход",
                     "amount": 1000,
                     "isIncome": true,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1722,15 +1648,15 @@
               }
             },
             "expense": {
-              "1": {
+              "Продукты": {
                 "data": [
                   {
                     "_id": "61c0c719280f8fc981a9695e",
                     "month": 12,
                     "day": 17,
                     "year": 2021,
-                    "description": "Маркет",
-                    "category": 1,
+                    "description": "Вода",
+                    "category": "Продукты",
                     "amount": 769,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1742,7 +1668,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Сахар",
-                    "category": 1,
+                    "category": "Продукты",
                     "amount": 400,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1754,7 +1680,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Печенье",
-                    "category": 1,
+                    "category": "Продукты",
                     "amount": 80,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1765,8 +1691,8 @@
                     "month": 12,
                     "day": 17,
                     "year": 2021,
-                    "description": "АТБ",
-                    "category": 1,
+                    "description": "Макароны",
+                    "category": "Продукты",
                     "amount": 750,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1775,7 +1701,7 @@
                 ],
                 "total": 1999
               },
-              "6": {
+              "Техника": {
                 "data": [
                   {
                     "_id": "61c0dd08280f8fc981a969f2",
@@ -1783,7 +1709,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Смартфон",
-                    "category": 6,
+                    "category": "Техника",
                     "amount": 12500,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1792,7 +1718,7 @@
                 ],
                 "total": 12500
               },
-              "7": {
+              "Комуналка, связь": {
                 "data": [
                   {
                     "_id": "61c0e0ec280f8fc981a96a26",
@@ -1800,7 +1726,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Платеж за газ",
-                    "category": 7,
+                    "category": "Комуналка, связь",
                     "amount": 1500,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1812,7 +1738,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Платеж за свет",
-                    "category": 7,
+                    "category": "Комуналка, связь",
                     "amount": 500,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1824,28 +1750,16 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Квартплата",
-                    "category": 7,
+                    "category": "Комуналка, связь",
                     "amount": 400,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
                     "timestamp": 1639771260000
-                  },
-                  {
-                    "_id": "61c0e13f280f8fc981a96a32",
-                    "month": 12,
-                    "day": 17,
-                    "year": 2021,
-                    "description": "Вода",
-                    "category": 7,
-                    "amount": 800,
-                    "isIncome": false,
-                    "owner": "61bc6dadf3f6f6eebf4df831",
-                    "timestamp": 1639771320000
                   }
                 ],
                 "total": 3200
               },
-              "9": {
+              "Образование": {
                 "data": [
                   {
                     "_id": "61c0dd35280f8fc981a969f6",
@@ -1853,7 +1767,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Курсы повышения квал.",
-                    "category": 9,
+                    "category": "Образование",
                     "amount": 2500,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
@@ -1862,7 +1776,7 @@
                 ],
                 "total": 2500
               },
-              "10": {
+              "Прочее": {
                 "data": [
                   {
                     "_id": "61c0dd52280f8fc981a969fa",
@@ -1870,7 +1784,7 @@
                     "day": 17,
                     "year": 2021,
                     "description": "Подарок",
-                    "category": 10,
+                    "category": "Прочее",
                     "amount": 1000,
                     "isIncome": false,
                     "owner": "61bc6dadf3f6f6eebf4df831",
