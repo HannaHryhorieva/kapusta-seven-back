@@ -55,7 +55,7 @@ const googleRedirect = async (req, res, next) => {
     await User.findByIdAndUpdate(user._id, { token })
   }
 
-  return res.redirect(`${process.env.FRONTEND_URL}/auth?accessToken=${token}`)
+  return res.redirect(`${process.env.FRONTEND_URL}?accessToken=${token}`)
 }
 
 module.exports = {
