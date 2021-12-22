@@ -1,19 +1,17 @@
-const CATEGORY_EXPENSE = [
-  'Транспорт',
-  'Продукты',
-  'Здоровье',
-  'Алкоголь',
-  'Развлечения',
-  'Всё для дома',
-  'Техника',
-  'Коммуналка, связь',
-  'Спорт, хобби',
-  'Образование',
-  'Прочее',
-]
+const CATEGORY_EXPENSE = {
+  0: 'Транспорт',
+  1: 'Продукты',
+  2: 'Здоровье',
+  3: 'Алкоголь',
+  4: 'Развлечения',
+  5: 'Всё для дома',
+  6: 'Техника',
+  7: 'Коммуналка, связь',
+  8: 'Спорт, хобби',
+  9: 'Образование',
+  10: 'Прочее',
+}
 
-const CATEGORY_INCOME = ['ЗП', 'Доп. доход']
+const CATEGORY_INCOME = { 0: 'ЗП', 1: 'Доп. доход' }
 
-const CATEGORY_ENUM = [...CATEGORY_INCOME, ...CATEGORY_EXPENSE]
-
-module.exports = { CATEGORY_EXPENSE, CATEGORY_INCOME, CATEGORY_ENUM }
+module.exports = { CATEGORY_EXPENSE, CATEGORY_INCOME }

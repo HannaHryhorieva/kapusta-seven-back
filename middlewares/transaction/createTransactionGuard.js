@@ -41,14 +41,13 @@ const createTransactionGuard = async (req, res, next) => {
       return next(new BadRequest('Amount is greater than balance'))
     }
 
-    const isCategoryNotCompareToTransaction = isIncome
-      ? !CATEGORY_INCOME.includes(category)
-      : !CATEGORY_EXPENSE.includes(category)
+    const isCategoryNotCompareToTransaction = !!(isIncome
+      ? !CATEGORY_INCOME[category]
+      : !CATEGORY_EXPENSE[category])
 
     if (isCategoryNotCompareToTransaction) {
-      return next(
-        new BadRequest(`This transaction type have no ${category} category`),
-      )
+      return next(new BadRequest('This transaction type have no such category'))
+
     }
 
     req.body.timestamp = timestamp
