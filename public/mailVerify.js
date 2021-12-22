@@ -435,7 +435,7 @@ const mailVerify = (verificationToken, name) => {
                                     font-size: 43px;
                                   "
                                 >
-                                  Thanks for signing up, <br />${name}
+                                  Thanks for signing up.
                                 </h1>
                               </td>
                             </tr>
