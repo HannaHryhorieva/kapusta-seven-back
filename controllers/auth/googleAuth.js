@@ -6,7 +6,7 @@ const { User } = require('../../model')
 const googleAuth = async (req, res) => {
   const stringifiedParams = queryString.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: `${process.env.BASE_URL}auth/google-redirect`,
+    redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
     scope: [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile'
@@ -29,7 +29,7 @@ const googleRedirect = async (req, res, next) => {
     data: {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.BASE_URL}auth/google-redirect`,
+      redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
       grant_type: 'authorization_code',
       code,
     }
