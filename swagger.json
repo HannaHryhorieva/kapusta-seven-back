@@ -16,7 +16,7 @@
     "image/*"
   ],
   "produces": ["application/json", "text/plain", "application/xml"],
-  "servers": [{ "url": "http://localhost:3001" }],
+  "servers": [{ "url": "https://kapusta-seven.herokuapp.com/" }],
   "tags": [
     {
       "name": "Auth",
