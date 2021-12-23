@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.2",
+    "version": "1.1.4",
     "title": "kapusta-api",
     "description": "Showing off kapusta-api",
     "license": {
@@ -93,8 +93,9 @@
         "responses": {
           "200": {
             "description": "Registration confirmed.",
+            "status": "success",
             "content": {
-              "application/json": {
+              "text/plain": {
                 "schema": {
                   "$ref": "#/components/schemas/UserVerifyResponse"
                 }
@@ -212,31 +213,6 @@
         }
       }
     },
-    "/auth/logout": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "User logout",
-        "security": [{ "Bearer": [] }],
-        "responses": {
-          "204": {
-            "description": "success",
-            "content": {
-              "application/json": {}
-            }
-          },
-          "500": {
-            "description": "Fail",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/balance": {
       "patch": {
         "tags": ["Auth"],
@@ -271,6 +247,31 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "success",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -347,55 +348,6 @@
         }
       }
     },
-    "/api/transactions/{id}": {
-      "delete": {
-        "tags": ["Transactions"],
-        "summary": "Delete one transaction",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "type": "string",
-            "description": "The id of transaction",
-            "example": "615ca9a2e6502c38886cf887"
-          }
-        ],
-        "security": [{ "Bearer": [] }],
-        "responses": {
-          "200": {
-            "description": "Transaction deleted",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteTransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteTransactionBadReqResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteTransactionErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/transactions/byYear/{year}": {
       "get": {
         "tags": ["Transactions"],
@@ -442,6 +394,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "No products found this year",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -479,14 +441,14 @@
                 }
               }
             }
-          }
-        },
-        "404": {
-          "description": "Not found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NotFoundErrorResponse"
+          },
+          "404": {
+            "description": "No products found this year and month",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
               }
             }
           }
@@ -547,14 +509,63 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "No products found this year and month",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
+              }
+            }
           }
-        },
-        "404": {
-          "description": "Not found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NotFoundErrorResponse"
+        }
+      }
+    },
+    "/api/transactions/{id}": {
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Delete one transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "The id of transaction",
+            "example": "615ca9a2e6502c38886cf887"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Transaction deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionBadReqResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionErrorResponse"
+                }
               }
             }
           }
@@ -1295,7 +1306,6 @@
             }
           ]
         }
-        
       },
       "GetTransactionByYearIncomeResponse": {
         "type": "object",
